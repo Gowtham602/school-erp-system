@@ -39,8 +39,14 @@ class Student extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
     public function teacher()
-{
-    return $this->belongsTo(User::class, 'teacher_id');
-}
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
+    }
+
+
+    public function histories()
+    {
+        return $this->hasMany(StudentHistory::class);
+    }
 
 }

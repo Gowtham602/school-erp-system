@@ -39,6 +39,15 @@
             <i class="bi bi-diagram-3 me-2"></i> Assign Subject
         </a>
 
+        <!-- Promotion -->
+        <a href="{{ route('promotion.index') }}" 
+       class="sidebar-link {{ request()->routeIs('promotion.*') ? 'active' : '' }}">
+       
+        <i class="bi bi-arrow-up-circle"></i> 
+        <span>Promotion</span>
+
+    </a>
+
         @endif
 
 

@@ -107,5 +107,15 @@ class StudentController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+
+    //students histrory view 
+    public function history($id)
+    {
+        $student = Student::with('histories.class')->findOrFail($id);
+        return view('admin.students.history', compact('student'));
+    }
+
+
 }
 

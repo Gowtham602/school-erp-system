@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\Admin\PromotionController;
 
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
@@ -27,7 +28,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     //  Students
     Route::resource('students', StudentController::class);
     Route::get('students-data', [StudentController::class, 'data'])
-        ->name('students.data');
+        ->name('students.data'); 
+
+
+    //Students History 
+    Route::get('/admin/student/{id}/history', [StudentController::class, 'history']);    
 
     //  Teachers
     
@@ -51,6 +56,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     //subject 
     Route::resource('subjects', SubjectController::class);
     Route::get('subjects-data',[SubjectController::class, 'data'])->name('subjects-data');
+
+
+    //students promotion to next class 
+    Route::get('/admin/promotion', [PromotionController::class, 'index'])->name('promotion.index');
+    Route::post('/admin/promotion', [PromotionController::class, 'promote'])->name('promotion.store');
 
 });
 
