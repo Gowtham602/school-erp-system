@@ -2,66 +2,410 @@
 
 @section('content')
 
-<div class="card p-4 shadow-sm">
+<div class="container-fluid">
 
-    <h5 class="mb-3">Edit Student</h5>
+    <div class="card shadow border-0">
 
-    <form method="POST" action="{{ route('students.update', $student->id) }}" id="studentForm">
-    @csrf
-    @method('PUT')
+        <!-- HEADER -->
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
 
-    <!-- Name -->
-    <input type="text" name="name" class="form-control mb-3"
-           value="{{ $student->name }}" placeholder="Student Name">
+            <h5 class="mb-0">
 
-    <!-- Father -->
-    <input type="text" name="father_name" class="form-control mb-3"
-           value="{{ $student->father_name }}" placeholder="Father Name">
+                <i class="bi bi-pencil-square"></i>
+                Edit Student
 
-    <!-- Mother -->
-    <input type="text" name="mother_name" class="form-control mb-3"
-           value="{{ $student->mother_name }}" placeholder="Mother Name">
+            </h5>
 
-    <!-- Phone -->
-    <input type="text" name="phone" class="form-control mb-3"
-           value="{{ $student->phone }}" placeholder="Phone">
+            <a href="{{ route('students.index') }}"
+               class="btn btn-light btn-sm">
 
-    <!-- Address -->
-    <textarea name="address" class="form-control mb-3"
-        placeholder="Address">{{ $student->address }}</textarea>
+                Back
 
-    <!-- Gender -->
-    <select name="gender" class="form-control mb-3">
-        <option value="">Select Gender</option>
-        <option value="male" {{ $student->gender == 'male' ? 'selected' : '' }}>Male</option>
-        <option value="female" {{ $student->gender == 'female' ? 'selected' : '' }}>Female</option>
-        <option value="other" {{ $student->gender == 'other' ? 'selected' : '' }}>Other</option>
-    </select>
+            </a>
 
-    <!-- Class -->
-    <select id="classSelect" class="form-control mb-3">
-        <option value="">Select Class</option>
-        @foreach($classes as $className => $group)
-            <option value="{{ $className }}"
-                {{ $student->class->name == $className ? 'selected' : '' }}>
-                {{ $className }}
-            </option>
-        @endforeach
-    </select>
+        </div>
 
-    <!-- Section -->
-    <select name="class_id" id="sectionSelect" class="form-control mb-3">
-        <option value="">Select Section</option>
-    </select>
 
-    <!-- Buttons -->
-    <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="{{ route('students.index') }}" class="btn btn-secondary">Back</a>
+        <!-- BODY -->
+        <div class="card-body">
+
+            <form id="studentForm"
+                  action="{{ route('students.update',$student->id) }}"
+                  method="POST">
+
+                @csrf
+                @method('PUT')
+
+                <div class="row">
+
+                    <!-- Admission No -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Admission No
+                        </label>
+
+                        <input type="text"
+                               name="admission_no"
+                               class="form-control"
+                               value="{{ $student->admission_no }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Roll No -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Roll No
+                        </label>
+
+                        <input type="text"
+                               name="roll_no"
+                               class="form-control"
+                               value="{{ $student->roll_no }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Section -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Section
+                        </label>
+
+                        <select name="section_id"
+                                class="form-select">
+
+                            <option value="">
+                                Select Section
+                            </option>
+
+                            @foreach($sections as $section)
+
+                                <option value="{{ $section->id }}"
+                                    {{ $student->section_id == $section->id ? 'selected' : '' }}>
+
+                                    {{ $section->class->name }}
+                                    -
+                                    {{ $section->name }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- First Name -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            First Name
+                        </label>
+
+                        <input type="text"
+                               name="first_name"
+                               class="form-control"
+                               value="{{ $student->first_name }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Last Name -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Last Name
+                        </label>
+
+                        <input type="text"
+                               name="last_name"
+                               class="form-control"
+                               value="{{ $student->last_name }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Gender -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Gender
+                        </label>
+
+                        <select name="gender"
+                                class="form-select">
+
+                            <option value="">
+                                Select Gender
+                            </option>
+
+                            <option value="male"
+                                {{ $student->gender == 'male' ? 'selected' : '' }}>
+                                Male
+                            </option>
+
+                            <option value="female"
+                                {{ $student->gender == 'female' ? 'selected' : '' }}>
+                                Female
+                            </option>
+
+                            <option value="other"
+                                {{ $student->gender == 'other' ? 'selected' : '' }}>
+                                Other
+                            </option>
+
+                        </select>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Phone -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Phone
+                        </label>
+
+                        <input type="text"
+                               name="phone"
+                               class="form-control"
+                               value="{{ $student->phone }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Email -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               value="{{ $student->email }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- DOB -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            DOB
+                        </label>
+
+                        <input type="date"
+                               name="dob"
+                               class="form-control"
+                               value="{{ $student->dob }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Father -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Father Name
+                        </label>
+
+                        <input type="text"
+                               name="father_name"
+                               class="form-control"
+                               value="{{ $student->father_name }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Mother -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Mother Name
+                        </label>
+
+                        <input type="text"
+                               name="mother_name"
+                               class="form-control"
+                               value="{{ $student->mother_name }}">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Address -->
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label">
+                            Address
+                        </label>
+
+                        <textarea name="address"
+                                  rows="3"
+                                  class="form-control">{{ $student->address }}</textarea>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTON -->
+                <div class="text-end">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="bi bi-check-circle"></i>
+                        Update Student
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
-
-    </form>
 
 </div>
 
 @endsection
+
+
+
+@push('scripts')
+
+<script>
+
+$(document).ready(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | REMOVE ERROR WHILE TYPING
+    |--------------------------------------------------------------------------
+    */
+
+    $(document).on(
+        'keyup change',
+        'input, select, textarea',
+        function () {
+
+            $(this).removeClass('is-invalid');
+
+            $(this)
+                .closest('.mb-3')
+                .find('.invalid-feedback')
+                .html('');
+        }
+    );
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE FORM AJAX
+    |--------------------------------------------------------------------------
+    */
+
+    $('#studentForm').submit(function (e) {
+
+        e.preventDefault();
+
+        let form = $(this);
+
+        $('.is-invalid').removeClass('is-invalid');
+
+        $('.invalid-feedback').html('');
+
+        $.ajax({
+
+            url: form.attr('action'),
+
+            type: 'POST',
+
+            data: form.serialize(),
+
+            success: function (response) {
+
+                Swal.fire({
+
+                    icon:'success',
+
+                    title:'Success',
+
+                    text:response.message,
+
+                    timer:1500,
+
+                    showConfirmButton:false
+                });
+
+                setTimeout(function(){
+
+                    window.location.href =
+                        "{{ route('students.index') }}";
+
+                },1500);
+            },
+
+            error: function (xhr) {
+
+                if(xhr.status === 422)
+                {
+                    let errors =
+                        xhr.responseJSON.errors;
+
+                    $.each(errors, function (field, messages) {
+
+                        let input =
+                            $('[name="' + field + '"]');
+
+                        input.addClass('is-invalid');
+
+                        input
+                            .closest('.mb-3')
+                            .find('.invalid-feedback')
+                            .html(messages[0]);
+                    });
+                }
+            }
+        });
+
+    });
+
+});
+
+</script>
+
+@endpush

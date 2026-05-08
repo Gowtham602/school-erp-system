@@ -55,7 +55,7 @@
     }
 }
 
-.sidebar-link {
+/* .sidebar-link {
     display: block;
     padding: 10px 12px;
     margin-bottom: 6px;
@@ -68,7 +68,7 @@
 .sidebar-link:hover {
     background: rgba(255,255,255,0.15);
     padding-left: 15px;
-}
+} */
 
 .sidebar-link.active {
     background: #fff;
@@ -90,4 +90,25 @@
 
 .form-select {
     border-radius: 8px;
+}
+.sidebar-link{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 15px;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    margin-bottom:8px;
+    white-space:nowrap;
+}
+
+.sidebar-link:hover{
+    background:rgba(255,255,255,0.15);
+    color:white;
+}
+
+.sidebar-link.active{
+    background:white;
+    color:#0d6efd;
 }

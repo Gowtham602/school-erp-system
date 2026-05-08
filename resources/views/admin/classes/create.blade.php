@@ -2,42 +2,88 @@
 
 @section('content')
 
-<div class="card shadow p-4">
+<div class="container-fluid">
 
-    <h5 class="mb-3">Add Class</h5>
+    <div class="card shadow border-0">
 
-    <form method="POST" action="{{ route('classes.store') }}">
-        @csrf
+        <!-- HEADER -->
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
 
-        <!-- Class Name -->
-        <div class="mb-3">
-            <label>Class Name</label>
-            <input type="text" name="name" class="form-control" placeholder="Ex: 10th" required>
+            <h5 class="mb-0">
+                <i class="bi bi-mortarboard"></i>
+                Add Class
+            </h5>
+
+            <a href="{{ route('classes.index') }}"
+               class="btn btn-light btn-sm">
+
+                <i class="bi bi-arrow-left"></i>
+                Back
+            </a>
+
         </div>
 
-        <!-- Section -->
-        <div class="mb-3">
-            <label>Section</label>
-            <input type="text" name="section" class="form-control" placeholder="Ex: A" required>
+        <!-- BODY -->
+        <div class="card-body p-4">
+
+            <!-- VALIDATION -->
+            @if ($errors->any())
+
+                <div class="alert alert-danger">
+
+                    <ul class="mb-0">
+
+                        @foreach ($errors->all() as $error)
+
+                            <li>{{ $error }}</li>
+
+                        @endforeach
+
+                    </ul>
+
+                </div>
+
+            @endif
+
+            <!-- FORM -->
+            <form method="POST"
+                  action="{{ route('classes.store') }}">
+
+                @csrf
+
+                <!-- CLASS NAME -->
+                <div class="mb-3">
+
+                    <label class="form-label fw-semibold">
+                        Class Name
+                    </label>
+
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           placeholder="Ex: 10th"
+                           value="{{ old('name') }}"
+                           required>
+
+                </div>
+
+                <!-- BUTTON -->
+                <div class="text-end">
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-check-circle"></i>
+                        Save Class
+                    </button>
+
+                </div>
+
+            </form>
+
         </div>
 
-        <!-- Teacher -->
-        <div class="mb-3">
-            <label>Class Teacher</label>
-            <select name="teacher_id" class="form-control">
-                <option value="">Select Teacher</option>
-                @foreach($teachers as $teacher)
-                    <option value="{{ $teacher->id }}">
-                        {{ $teacher->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <button class="btn btn-success">Save</button>
-        <a href="{{ route('classes.index') }}" class="btn btn-secondary">Back</a>
-
-    </form>
+    </div>
 
 </div>
 

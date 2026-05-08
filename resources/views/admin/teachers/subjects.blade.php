@@ -17,7 +17,7 @@
         <tr>
             <td>{{ $key + 1 }}</td>
             <td>{{ $subject->name }}</td>
-            <td>{{ $subject->class->name }}</td>
+           {{ $subject->classModel->name }}
             <td>{{ $subject->class->section }}</td>
         </tr>
         @endforeach

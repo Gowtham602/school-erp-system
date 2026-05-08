@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\ClassModel;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class ClassController extends Controller
@@ -14,58 +15,69 @@ class ClassController extends Controller
 
     public function data()
     {
-        $classes = ClassModel::with('teacher');
+        $classes = ClassModel::query();
 
         return datatables()->of($classes)
-            ->addColumn('teacher', fn($row) => $row->teacher->name ?? '-')
+
+            ->addColumn('sections_count', function ($row) {
+                return $row->sections()->count();
+            })
+
             ->addColumn('action', function ($row) {
+
                 return '
-                    <a href="'.route('classes.edit', $row->id).'" class="btn btn-sm btn-primary"> <i class="bi bi-pencil"></i></a>
-                    <button data-id="'.$row->id.'" class="btn btn-sm btn-danger deleteBtn"> <i class="bi bi-trash"></i></button>
+                    <a href="'.route('classes.edit',$row->id).'"
+                        class="btn btn-primary btn-sm">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+
+                    <button data-id="'.$row->id.'"
+                        class="btn btn-danger btn-sm deleteBtn">
+                        <i class="bi bi-trash"></i>
+                    </button>
                 ';
             })
+
             ->rawColumns(['action'])
             ->make(true);
     }
 
     public function create()
     {
-        $teachers = User::where('role', 'teacher')->get();
-        return view('admin.classes.create', compact('teachers'));
+        return view('admin.classes.create');
     }
 
     public function store(Request $request)
     {
-        //  Only admin
-        if (auth()->user()->role !== 'admin') {
-            abort(403);
-        }
-
         $request->validate([
-            'name' => 'required',
-            'section' => 'required',
-            'teacher_id' => 'nullable|exists:users,id'
+            'name' => 'required|unique:classes,name'
         ]);
 
-        ClassModel::create($request->all());
+        ClassModel::create([
+            'name' => $request->name
+        ]);
 
         return redirect()->route('classes.index');
     }
 
     public function edit($id)
     {
-        // dd($id);
         $class = ClassModel::findOrFail($id);
-        $teachers = User::where('role', 'teacher')->get();
 
-        return view('admin.classes.edit', compact('class', 'teachers'));
+        return view('admin.classes.edit', compact('class'));
     }
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|unique:classes,name,'.$id
+        ]);
+
         $class = ClassModel::findOrFail($id);
 
-        $class->update($request->all());
+        $class->update([
+            'name' => $request->name
+        ]);
 
         return redirect()->route('classes.index');
     }
@@ -74,6 +86,8 @@ class ClassController extends Controller
     {
         ClassModel::findOrFail($id)->delete();
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

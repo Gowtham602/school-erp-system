@@ -2,32 +2,127 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="container mt-4">
 
-    <div class="d-flex justify-content-between mb-3">
-        <h5 class="fw-bold">Subjects</h5>
+    <!-- PAGE HEADER -->
 
-        <a href="{{ route('subjects.create') }}" class="btn btn-success btn-sm">
-            <i class="bi bi-plus"></i> Add Subject
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h4 class="mb-0">
+            Subjects
+        </h4>
+
+        <a href="{{ route('subjects.create') }}"
+           class="btn btn-primary">
+
+            <i class="bi bi-plus-circle me-1"></i>
+
+            Add Subject
+
         </a>
+
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body table-responsive">
 
-            <table class="table table-bordered align-middle" id="subjectTable">
-                <thead class="table-light">
+
+    <!-- TABLE -->
+
+    <div class="card shadow border-0">
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-dark">
+
                     <tr>
-                        <th>#</th>
-                        <th>Subject</th>
+
+                        <th width="80">S.No</th>
+
                         <th>Class</th>
-                        <th>Teachers</th>
-                        <th>Action</th>
+
+                        <th>Subject</th>
+
+                        <th width="180">Action</th>
+
                     </tr>
+
                 </thead>
+
+                <tbody>
+
+                    @forelse($subjects as $key => $subject)
+
+                    <tr>
+
+                        <td>
+                            {{ ++$key }}
+                        </td>
+
+                        <td>
+                            {{ $subject->classModel->name }}
+                        </td>
+
+                        <td>
+                            {{ $subject->name }}
+                        </td>
+
+                        <td>
+
+                            <!-- EDIT -->
+
+                            <a href="{{ route('subjects.edit',$subject->id) }}"
+                               class="btn btn-success btn-sm">
+
+                                <i class="bi bi-pencil-square"></i>
+
+                            </a>
+
+
+
+                            <!-- DELETE -->
+
+                            <form action="{{ route('subjects.destroy',$subject->id) }}"
+                                  method="POST"
+                                  class="d-inline deleteForm">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit"
+                                        class="btn btn-danger btn-sm">
+
+                                    <i class="bi bi-trash"></i>
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+
+                    @empty
+
+                    <tr>
+
+                        <td colspan="4"
+                            class="text-center text-muted">
+
+                            No Subjects Found
+
+                        </td>
+
+                    </tr>
+
+                    @endforelse
+
+                </tbody>
+
             </table>
 
         </div>
+
     </div>
 
 </div>
@@ -35,61 +130,77 @@
 @endsection
 
 
+
 @push('scripts')
+
+<!-- SUCCESS MESSAGE -->
+
+@if(session('success'))
+
 <script>
 
+Swal.fire({
 
+    icon: 'success',
 
-$('#subjectTable').DataTable({
-    processing: true,
-    serverSide: true,
-    ajax: "{{ route('subjects-data') }}",
+    title: 'Success',
 
-    columns: [
-        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+    text: '{{ session('success') }}',
 
-        { data: 'name', name: 'name' },
+    timer: 2000,
 
-        { data: 'class', name: 'class.name' },
+    showConfirmButton: false
 
-        { data: 'teachers', name: 'teachers.name', orderable: false },
-
-        { data: 'action', orderable: false, searchable: false }
-    ]
 });
 
+</script>
 
-/*  SweetAlert Delete */
-$(document).on('click', '.deleteBtn', function () {
+@endif
 
-    let url = $(this).data('url');
 
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This subject will be deleted!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33'
-    }).then((result) => {
 
-        if (result.isConfirmed) {
+<!-- DELETE CONFIRM -->
 
-            $.ajax({
-                url: url,
-                type: 'POST',
-                data: {
-                    _method: 'DELETE',
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function () {
-                    $('#subjectTable').DataTable().ajax.reload();
-                    Swal.fire('Deleted!', 'Subject removed.', 'success');
-                }
-            });
+<script>
 
-        }
+$(document).ready(function(){
+
+    $('.deleteForm').submit(function(e){
+
+        e.preventDefault();
+
+        let form = this;
+
+        Swal.fire({
+
+            title: 'Are you sure?',
+
+            text: "You won't be able to revert this!",
+
+            icon: 'warning',
+
+            showCancelButton: true,
+
+            confirmButtonColor: '#3085d6',
+
+            cancelButtonColor: '#d33',
+
+            confirmButtonText: 'Yes, delete it!'
+
+        }).then((result) => {
+
+            if (result.isConfirmed) {
+
+                form.submit();
+
+            }
+
+        });
+
     });
 
 });
+
 </script>
+
 @endpush

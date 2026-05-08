@@ -4,18 +4,31 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Subject extends Model
 {
-    protected $guarded = [];
+    use HasFactory, SoftDeletes;
 
-    public function class()
+    protected $fillable = [
+        'name',
+        'class_id'
+    ];
+
+
+    public function classModel()
     {
-        return $this->belongsTo(ClassModel::class);
+        return $this->belongsTo(ClassModel::class, 'class_id');
     }
 
-   public function teachers()
-{
-    return $this->belongsToMany(User::class, 'subject_teacher', 'subject_id', 'teacher_id');
-}
+
+    public function teachers()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'subject_teachers',
+            'subject_id',
+            'teacher_id'
+        );
+    }
 }

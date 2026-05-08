@@ -1,126 +1,124 @@
 <?php
 
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Subject;
 use App\Models\ClassModel;
-use App\Models\User;
-use Yajra\DataTables\Facades\DataTables;
-
+use App\Models\Subject;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SubjectController extends Controller
 {
     public function index()
     {
-        $subjects = Subject::with('class','teachers')->get();
+        $subjects = Subject::with('classModel')->latest()->get();
+
         return view('admin.subjects.index', compact('subjects'));
     }
 
+
     public function create()
     {
-        $classes = ClassModel::all();
-        $teachers = User::where('role','teacher')->get();
+        $classes = ClassModel::latest()->get();
 
-        return view('admin.subjects.create', compact('classes','teachers'));
+        return view('admin.subjects.create', compact('classes'));
     }
 
-    public function store(Request $request)
-    {
-        // dd('hi');
-        $subject = Subject::create([
-            'name' => $request->name,
-            'class_id' => $request->class_id,
-        ]);
 
-        $subject->teachers()->sync($request->teacher_ids);
+   public function store(Request $request)
+{
+    $request->validate([
 
-        return redirect()->route('subjects.index');
-    }
+        'class_id' => 'required',
+
+        'name' => [ 'required',
+
+            Rule::unique('subjects') ->where(function ($query) use ($request) {
+                    return $query->where(  'class_id',  $request->class_id );
+                })
+        ]
+    ], [  'name.unique' => 'This subject already exists for selected class.' ]);
+
+
+    Subject::create([
+        'name'     => $request->name,
+        'class_id' => $request->class_id,
+    ]);
+
+    return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject Added Successfully');
+}
 
     public function edit($id)
     {
         $subject = Subject::findOrFail($id);
-        $classes = ClassModel::all();
-        $teachers = User::where('role','teacher')->get();
 
-        return view('admin.subjects.edit', compact('subject','classes','teachers'));
+        $classes = ClassModel::latest()->get();
+
+        return view('admin.subjects.edit', compact(
+            'subject',
+            'classes'
+        ));
     }
 
-    public function update(Request $request, $id)
-    {
-        $subject = Subject::findOrFail($id);
 
-        $subject->update([
-            'name' => $request->name,
-            'class_id' => $request->class_id,
-        ]);
-
-        $subject->teachers()->sync($request->teacher_ids);
-
-        return redirect()->route('subjects.index');
-    }
-
-    public function destroy($id)
-    {
-        Subject::findOrFail($id)->delete();
-        return back();
-    }
-
-    public function data()
+   public function update(Request $request, $id)
 {
-    $subjects = Subject::with(['class', 'teachers']);
+    $request->validate([
 
-    return DataTables::of($subjects)
+        'class_id' => 'required',
 
-        ->addIndexColumn()
+        'name' => [
 
-        // CLASS
-        ->addColumn('class', function ($row) {
-            return $row->class->name ?? '-';
-        })
+            'required',
 
-        // TEACHERS
-        ->addColumn('teachers', function ($row) {
-            return $row->teachers->map(function ($t) {
-                return '<span class="badge bg-primary me-1">'.$t->name.'</span>';
-            })->implode(' ');
-        })
+            Rule::unique('subjects')
+                ->ignore($id)
+                ->where(function ($query) use ($request) {
 
-        //  SEARCH FIX FOR RELATION
-        ->filterColumn('class', function ($query, $keyword) {
-            $query->whereHas('class', function ($q) use ($keyword) {
-                $q->where('name', 'like', "%{$keyword}%");
-            });
-        })
+                    return $query->where(
+                        'class_id',
+                        $request->class_id
+                    );
 
-        ->filterColumn('teachers', function ($query, $keyword) {
-            $query->whereHas('teachers', function ($q) use ($keyword) {
-                $q->where('name', 'like', "%{$keyword}%");
-            });
-        })
+                })
 
-        // ACTION BUTTONS
-        ->addColumn('action', function ($row) {
+        ]
 
-            $edit = route('subjects.edit', $row->id);
-            $delete = route('subjects.destroy', $row->id);
+    ], [
 
-            return "
-                <a href='{$edit}' class='btn btn-sm btn-primary'>
-                    <i class='bi bi-pencil'></i>
-                </a>
+        'name.unique' => 'This subject already exists for selected class.'
 
-                <button data-url='{$delete}' class='btn btn-sm btn-danger deleteBtn'>
-                    <i class='bi bi-trash'></i>
-                </button>
-            ";
-        })
+    ]);
 
-        ->rawColumns(['teachers', 'action'])
-        ->make(true);
+
+    $subject = Subject::findOrFail($id);
+
+    $subject->update([
+
+        'name'     => $request->name,
+
+        'class_id' => $request->class_id,
+
+    ]);
+
+
+    return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject Updated Successfully');
 }
 
+
+    public function destroy($id)
+{
+    $subject = Subject::findOrFail($id);
+
+    $subject->delete();
+
+    return redirect()
+            ->route('subjects.index')
+            ->with('success', 'Subject Deleted Successfully');
+}
 }

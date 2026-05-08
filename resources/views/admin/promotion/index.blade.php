@@ -6,7 +6,7 @@
 
     <div class="row">
 
-        <!-- 🔹 LEFT: PROMOTION FORM -->
+        <!--  LEFT: PROMOTION FORM -->
         <div class="col-md-5">
 
             <div class="card shadow border-0">
@@ -60,7 +60,7 @@
 
         </div>
 
-        <!-- 🔹 RIGHT: HISTORY TABLE -->
+        <!--  RIGHT: HISTORY TABLE -->
         <div class="col-md-7">
 
             <div class="card shadow border-0">

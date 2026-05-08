@@ -2,54 +2,51 @@
 
 @section('content')
 
-<div class="card p-4 shadow-sm">
-    <h5>Add Subject</h5>
+<div class="container mt-4">
 
-    <form method="POST" action="{{ route('subjects.store') }}">
-        @csrf
+    <div class="card shadow">
 
-        <!-- Subject Name -->
-        <input type="text" name="name" class="form-control mb-3" placeholder="Subject Name" required>
+        <div class="card-header">
+            <h4>Add Subject</h4>
+        </div>
 
-        <!-- Class -->
-        <select name="class_id" class="form-control mb-3" required>
-            <option value="">Select Class</option>
-            @foreach($classes as $class)
-                <option value="{{ $class->id }}">
-                    {{ $class->name }} - {{ $class->section }}
-                </option>
-            @endforeach
-        </select>
+        <div class="card-body">
 
-        <!-- Teachers -->
-        <label>Select Teachers</label>
-        <select name="teacher_ids[]" class="form-control mb-3 select2" multiple required>
-            @foreach($teachers as $teacher)
-                <option value="{{ $teacher->id }}">
-                    {{ $teacher->name }}
-                </option>
-            @endforeach
-        </select>
+            <form action="{{ route('subjects.store') }}"  method="POST">
+                @csrf
+                <!-- CLASS -->
+               <div class="mb-3">
+                    <label>Class</label>
+                    <select name="class_id"  class="form-control @error('class_id') is-invalid @enderror">
+                        <option value="">Select Class</option>
+                        @foreach($classes as $class)
+                            <option value="{{ $class->id }}">
+                                {{ $class->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('class_id')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <!-- SUBJECT -->
+                <div class="mb-3">
+                    <label>Subject Name</label>
+                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
+                    @error('name')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <!-- BUTTON -->
+                <button type="submit" class="btn btn-primary">    Save Subject   </button>
 
-        <button class="btn btn-primary">Save</button>
-    </form>
+            </form>
+        </div>
+    </div>
 </div>
-@push('scripts')
-<script>
-$(document).ready(function () {
 
-    console.log("Select2 Init"); // debug
-
-    if ($.fn.select2) {
-        $('.select2').select2({
-            placeholder: "Select Teachers",
-            width: '100%'
-        });
-    } else {
-        console.error("Select2 not loaded");
-    }
-
-});
-</script>
-@endpush
 @endsection

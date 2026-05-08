@@ -1,175 +1,533 @@
+<!-- resources/views/admin/students/create.blade.php -->
+
 @extends('layouts.app')
 
 @section('content')
 
-<div class="card p-4 shadow-sm">
+<div class="container-fluid">
 
-    <h5 class="mb-3">Add Student</h5>
+    <div class="card shadow border-0">
 
-    <form method="POST" action="{{ route('students.store') }}" id="studentForm">  
-    @csrf
+        <!-- HEADER -->
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
 
-    <!-- Name -->
-    <input type="text" name="name" class="form-control mb-3" placeholder="Student Name">
+            <h5 class="mb-0">
 
-    <!-- Father -->
-    <input type="text" name="father_name" class="form-control mb-3" placeholder="Father Name">
+                <i class="bi bi-person-plus"></i>
+                Add Student
 
-    <!-- Mother -->
-    <input type="text" name="mother_name" class="form-control mb-3" placeholder="Mother Name">
+            </h5>
 
-    <!-- Phone -->
-    <input type="text" name="phone" class="form-control mb-3" placeholder="Phone">
+            <a href="{{ route('students.index') }}"
+               class="btn btn-light btn-sm">
 
-    <!-- Address -->
-    <textarea name="address" class="form-control mb-3" placeholder="Address"></textarea>
+                Back
 
-    <!-- Gender -->
-    <select name="gender" class="form-control mb-3">
-        <option value="">Select Gender</option>
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-    </select>
+            </a>
 
-    <!-- Class -->
-    <select id="classSelect"  name="class_name"  class="form-control mb-3">
-        <option value="">Select Class</option>
-        @foreach($classes as $className => $group)
-            <option value="{{ $className }}">{{ $className }}</option>
-        @endforeach
-    </select>
+        </div>
 
-    <!-- Section -->
-    <select name="class_id" id="sectionSelect" class="form-control mb-3" disabled>
-        <option value="">Select Section</option>
-    </select>
 
-    <!-- Buttons -->
-    <div class="d-flex gap-2">
-        <button type="submit"  class="btn btn-success">Save</button>
-        <a href="{{ route('students.index') }}" class="btn btn-secondary">Back</a>
+        <!-- BODY -->
+        <div class="card-body">
+
+            <form id="studentForm"
+                  action="{{ route('students.store') }}"
+                  method="POST">
+
+                @csrf
+
+                <div class="row">
+
+                    <!-- Admission No -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Admission No
+                        </label>
+
+                        <input type="text"
+                               name="admission_no"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Roll No -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Roll No
+                        </label>
+
+                        <input type="text"
+                               name="roll_no"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Section -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Section
+                        </label>
+
+                        <select name="section_id"
+                                class="form-select">
+
+                            <option value="">
+                                Select Section
+                            </option>
+
+                            @foreach($sections as $section)
+
+                                <option value="{{ $section->id }}">
+
+                                    {{ $section->class->name }}
+                                    -
+                                    {{ $section->name }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- First Name -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            First Name
+                        </label>
+
+                        <input type="text"
+                               name="first_name"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Last Name -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Last Name
+                        </label>
+
+                        <input type="text"
+                               name="last_name"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Gender -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Gender
+                        </label>
+
+                        <select name="gender"
+                                class="form-select">
+
+                            <option value="">
+                                Select Gender
+                            </option>
+
+                            <option value="male">
+                                Male
+                            </option>
+
+                            <option value="female">
+                                Female
+                            </option>
+
+                            <option value="other">
+                                Other
+                            </option>
+
+                        </select>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Phone -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Phone
+                        </label>
+
+                        <input type="text"
+                               name="phone"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Email -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input type="email"
+                               name="email"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- DOB -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            DOB
+                        </label>
+
+                        <input type="date"
+                               name="dob"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Father -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Father Name
+                        </label>
+
+                        <input type="text"
+                               name="father_name"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Mother -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Mother Name
+                        </label>
+
+                        <input type="text"
+                               name="mother_name"
+                               class="form-control">
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+
+                    <!-- Address -->
+                    <div class="col-md-12 mb-3">
+
+                        <label class="form-label">
+                            Address
+                        </label>
+
+                        <textarea name="address"
+                                  rows="3"
+                                  class="form-control"></textarea>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTON -->
+                <div class="text-end">
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="bi bi-check-circle"></i>
+                        Save Student
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
     </div>
 
-    </form>
-
 </div>
+
+@endsection
+
+
+
 @push('scripts')
 
 <script>
+
 $(document).ready(function () {
 
-    let classData = @json($classes);
+    /*
+    |--------------------------------------------------------------------------
+    | ON CHANGE VALIDATION
+    |--------------------------------------------------------------------------
+    */
 
-    // STOP NORMAL SUBMIT
-    $('#studentForm').on('submit', function(e) {
+    $(document).on(
+        'keyup change',
+        'input, select, textarea',
+        function () {
+
+            validateField($(this));
+        }
+    );
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORM SUBMIT
+    |--------------------------------------------------------------------------
+    */
+
+    $('#studentForm').submit(function (e) {
+
         e.preventDefault();
-    });
 
-    // SECTION DROPDOWN
-    $('#classSelect').change(function () {
+        let form = $(this);
 
-        let selectedClass = $(this).val();
-        let sectionDropdown = $('#sectionSelect');
+        $('.is-invalid').removeClass('is-invalid');
 
-        sectionDropdown.html('<option value="">Select Section</option>');
+        $('.invalid-feedback').html('');
 
-        if (!selectedClass) {
-            sectionDropdown.prop('disabled', true);
-            return;
-        }
+        $.ajax({
 
-        let sections = classData[selectedClass];
+            url: form.attr('action'),
 
-        if (sections) {
-            sections.forEach(function (item) {
-                sectionDropdown.append(
-                    `<option value="${item.id}">${item.section}</option>`
-                );
-            });
-        }
+            type: 'POST',
 
-        sectionDropdown.prop('disabled', false);
-    });
+            data: form.serialize(),
 
-    // VALIDATION
-    $('#studentForm').validate({
+            success: function (response) {
 
-        rules: {
-            name: "required",
-            father_name: "required",
-            mother_name: "required",
-            phone: {
-                required: true,
-                digits: true,
-                minlength: 10,
-                maxlength: 10
+                Swal.fire({
+
+                    icon:'success',
+
+                    title:'Success',
+
+                    text:response.message,
+
+                    timer:1500,
+
+                    showConfirmButton:false
+                });
+
+                setTimeout(function(){
+
+                    window.location.href =
+                        "{{ route('students.index') }}";
+
+                },1500);
             },
-            address: "required",
-            gender: "required",
-            class_id: "required"
-        },
 
-        messages: {
-            name: "Enter student name",
-            father_name: "Enter father name",
-            mother_name: "Enter mother name",
-            phone: "Enter valid 10 digit number",
-            address: "Enter address",
-            gender: "Select gender",
-            class_id: "Select section"
-        },
+            error: function (xhr) {
 
-        errorClass: 'text-danger',
+                if (xhr.status === 422) {
 
-        submitHandler: function(form) {
+                    let errors =
+                        xhr.responseJSON.errors;
 
-            let btn = $(form).find('button[type="submit"]');
-            btn.prop('disabled', true).text('Saving...');
+                    $.each(errors, function (field, messages) {
 
-            $.ajax({
-                url: "{{ route('students.store') }}",
-                type: "POST",
-                data: $(form).serialize(),
+                        let input =
+                            $('[name="' + field + '"]');
 
-                success: function(res) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: res.message
-                    }).then(() => {
-                        window.location.href = "{{ route('students.index') }}";
+                        input.addClass('is-invalid');
+
+                        input
+                            .closest('.mb-3')
+                            .find('.invalid-feedback')
+                            .html(messages[0]);
                     });
-                },
-
-                error: function(xhr) {
-
-                    let msg = '';
-
-                    if (xhr.responseJSON?.errors) {
-                        $.each(xhr.responseJSON.errors, function(key, value) {
-                            msg += value[0] + '<br>';
-                        });
-                    } else {
-                        msg = "Something went wrong!";
-                    }
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Validation Error',
-                        html: msg
-                    });
-
-                    btn.prop('disabled', false).text('Save');
                 }
-            });
-
-            return false;
-        }
+            }
+        });
     });
+
+
+
+
+
+    function validateField(input)
+    {
+        let name  = input.attr('name');
+
+        let value = input.val();
+
+        input.removeClass('is-invalid');
+
+        input.closest('.mb-3')
+             .find('.invalid-feedback')
+             .html('');
+
+
+
+        // FIRST NAME
+        if(name == 'first_name')
+        {
+            if(value.trim() == '')
+            {
+                showError(input,
+                    'First name is required');
+            }
+        }
+
+
+        // ADMISSION NO
+        if(name == 'admission_no')
+        {
+            if(value.trim() == '')
+            {
+                showError(input,
+                    'Admission no is required');
+            }
+        }
+
+
+        // PHONE
+        if(name == 'phone')
+        {
+            let phonePattern =
+                /^[0-9]{10}$/;
+
+            if(value.trim() == '')
+            {
+                showError(input,
+                    'Phone is required');
+            }
+
+            else if(!phonePattern.test(value))
+            {
+                showError(input,
+                    'Enter valid 10 digit phone');
+            }
+        }
+
+
+        // EMAIL
+        if(name == 'email')
+        {
+            let emailPattern =
+                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if(value != '' &&
+                !emailPattern.test(value))
+            {
+                showError(input,
+                    'Enter valid email');
+            }
+        }
+
+
+        // FATHER
+        if(name == 'father_name')
+        {
+            if(value.trim() == '')
+            {
+                showError(input,
+                    'Father name is required');
+            }
+        }
+
+
+        // MOTHER
+        if(name == 'mother_name')
+        {
+            if(value.trim() == '')
+            {
+                showError(input,
+                    'Mother name is required');
+            }
+        }
+
+
+        // ADDRESS
+        if(name == 'address')
+        {
+            if(value.trim() == '')
+            {
+                showError(input,
+                    'Address is required');
+            }
+        }
+
+
+        // GENDER
+        if(name == 'gender')
+        {
+            if(value == '')
+            {
+                showError(input,
+                    'Select gender');
+            }
+        }
+
+
+        // SECTION
+        if(name == 'section_id')
+        {
+            if(value == '')
+            {
+                showError(input,
+                    'Select section');
+            }
+        }
+    }
+
+
+    function showError(input, message)
+    {
+        input.addClass('is-invalid');
+
+        input.closest('.mb-3')
+             .find('.invalid-feedback')
+             .html(message);
+    }
 
 });
+
 </script>
 
 @endpush
-@endsection

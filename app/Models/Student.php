@@ -10,14 +10,34 @@ class Student extends Model
     use HasFactory;
 
 
-     protected $fillable = [
-        'name',
+    protected $fillable = [
+
+        'admission_no',
+        'roll_no',
+        'section_id',
+        'admission_date',
+        'status',
+
+        'first_name',
+        'last_name',
+        'dob',
+        'gender',
+        'blood_group',
+        'photo',
+
         'father_name',
         'mother_name',
+        'guardian_phone',
+
         'phone',
+        'email',
         'address',
-        'gender',
-        'class_id',
+
+        'religion',
+        'nationality',
+        'aadhaar_no',
+        'transport_route',
+
         'created_by',
         'updated_by'
     ];
@@ -47,6 +67,10 @@ class Student extends Model
     public function histories()
     {
         return $this->hasMany(StudentHistory::class);
+    }
+     public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 
 }

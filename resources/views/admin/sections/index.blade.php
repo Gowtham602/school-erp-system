@@ -10,15 +10,15 @@
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
 
             <h5 class="mb-0">
-                <i class="bi bi-mortarboard"></i>
-                Classes
+                <i class="bi bi-diagram-3"></i>
+                Sections
             </h5>
 
-            <a href="{{ route('classes.create') }}"
+            <a href="{{ route('sections.create') }}"
                class="btn btn-light btn-sm">
 
                 <i class="bi bi-plus-circle"></i>
-                Add Class
+                Add Section
             </a>
 
         </div>
@@ -27,15 +27,22 @@
         <div class="card-body">
 
             <table class="table table-bordered table-hover align-middle"
-                   id="classTable">
+                   id="sectionTable">
 
                 <thead class="table-dark">
 
                     <tr>
+
                         <th width="80">SNo</th>
+
                         <th>Class</th>
-                        <th>Total Sections</th>
+
+                        <th>Section</th>
+
+                        <th>Class Teacher</th>
+
                         <th width="120">Action</th>
+
                     </tr>
 
                 </thead>
@@ -57,12 +64,12 @@
 
 $(document).ready(function(){
 
-    $('#classTable').DataTable({
+    $('#sectionTable').DataTable({
 
         processing:true,
         serverSide:true,
 
-        ajax: "{{ route('classes.data') }}",
+        ajax:"{{ route('sections.data') }}",
 
         columns:[
 
@@ -80,15 +87,18 @@ $(document).ready(function(){
             },
 
             {
+                data:'class_name',
+                name:'class_name'
+            },
+
+            {
                 data:'name',
                 name:'name'
             },
 
             {
-                data:'sections_count',
-                name:'sections_count',
-                orderable:false,
-                searchable:false
+                data:'teacher',
+                name:'teacher'
             },
 
             {
@@ -106,11 +116,11 @@ $(document).ready(function(){
 
         let id = $(this).data('id');
 
-        if(confirm('Delete this class?')){
+        if(confirm('Delete this section?')){
 
             $.ajax({
 
-                url: "{{ url('admin/classes') }}/" + id,
+                url:"{{ url('admin/sections') }}/" + id,
 
                 type:'DELETE',
 
@@ -118,22 +128,12 @@ $(document).ready(function(){
                     _token:'{{ csrf_token() }}'
                 },
 
-                success:function(response){
+                success:function(){
 
-                    $('#classTable')
+                    $('#sectionTable')
                         .DataTable()
                         .ajax.reload();
-
-                },
-
-                error:function(xhr){
-
-                    console.log(xhr.responseText);
-
-                    alert('Something went wrong');
-
                 }
-
             });
         }
     });

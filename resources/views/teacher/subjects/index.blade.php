@@ -34,7 +34,7 @@
 
                             <td>
                                 <span class="badge bg-info text-dark">
-                                    {{ $subject->class->name }}
+                              {{ $subject->classModel->name }}      
                                 </span>
                             </td>
 

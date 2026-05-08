@@ -2,6 +2,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ClassController;
+use App\Http\Controllers\Admin\SectionController;
+use App\Http\Controllers\Admin\SubjectTeacherController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\SubjectController;
@@ -22,7 +24,7 @@ Route::middleware(['auth', 'role:admin'])
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
 
     //  Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])
+    Route::get('/dashboard', [DashBoardController::class, 'index'])
         ->name('admin.dashboard');
 
     //  Students
@@ -30,13 +32,16 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('students-data', [StudentController::class, 'data'])
         ->name('students.data'); 
 
+    // Route::get('students/{id}/show',[StudentController::class, 'show'])->name('students.show');
+
 
     //Students History 
     Route::get('/admin/student/{id}/history', [StudentController::class, 'history']);    
 
     //  Teachers
     
-    Route::resource('teachers', TeacherController::class)->except(['show']);
+    // Route::resource('teachers', TeacherController::class)->except(['show']);
+     Route::resource('teachers', TeacherController::class );
 
     Route::get('teachers-data', [TeacherController::class, 'data'])
         ->name('teachers.data');
@@ -52,10 +57,24 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('classes-data', [ClassController::class, 'data'])
         ->name('classes.data');
 
+    //section 
+    Route::resource('sections', SectionController::class);
+    Route::get('sections-data', [SectionController::class,'data'])
+    ->name('sections.data');    
+
 
     //subject 
     Route::resource('subjects', SubjectController::class);
     Route::get('subjects-data',[SubjectController::class, 'data'])->name('subjects-data');
+
+
+    // subject teacher
+
+    Route::resource('subject-teacher', SubjectTeacherController::class);
+    Route::get('admin/get-subjects/{class_id}', [SubjectTeacherController::class, 'getSubjects'])->name('get-subjects');
+
+
+    Route::get('admin/get-sections/{class_id}',[SubjectTeacherController::class, 'getSections'])->name('get-sections');
 
 
     //students promotion to next class 
