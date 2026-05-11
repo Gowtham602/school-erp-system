@@ -4,7 +4,7 @@
 
 <div class="container mt-4">
 
-    <div class="card">
+    <div class="card shadow">
 
         <div class="card-header">
             <h4>Edit Subject Teacher</h4>
@@ -17,11 +17,15 @@
                 @csrf
                 @method('PUT')
 
+
+                <!-- SUBJECT -->
+
                 <div class="mb-3">
 
                     <label>Subject</label>
 
-                    <select name="subject_id" class="form-control">
+                    <select name="subject_id"
+                            class="form-control">
 
                         @foreach($subjects as $subject)
 
@@ -39,11 +43,17 @@
 
                 </div>
 
+
+
+
+                <!-- SECTION -->
+
                 <div class="mb-3">
 
                     <label>Section</label>
 
-                    <select name="section_id" class="form-control">
+                    <select name="section_id"
+                            class="form-control">
 
                         @foreach($sections as $section)
 
@@ -51,7 +61,7 @@
                             value="{{ $section->id }}"
                             {{ $subjectTeacher->section_id == $section->id ? 'selected' : '' }}>
 
-                            {{ $section->class->name }}
+                            {{ $section->classModel->name }}
                             -
                             {{ $section->name }}
 
@@ -63,11 +73,17 @@
 
                 </div>
 
+
+
+
+                <!-- TEACHER -->
+
                 <div class="mb-3">
 
                     <label>Teacher</label>
 
-                    <select name="teacher_id" class="form-control">
+                    <select name="teacher_id"
+                            class="form-control">
 
                         @foreach($teachers as $teacher)
 
@@ -85,8 +101,14 @@
 
                 </div>
 
-                <button class="btn btn-success">
+
+
+
+                <button type="submit"
+                        class="btn btn-success">
+
                     Update
+
                 </button>
 
             </form>
@@ -99,7 +121,10 @@
 
 @endsection
 
-@section('scripts')
+
+
+
+@push('scripts')
 
 <script>
 
@@ -109,17 +134,34 @@ $('#editForm').submit(function(e){
 
     $.ajax({
 
-        url:'/subject-teacher/{{ $subjectTeacher->id }}',
+        url: "{{ route('subject-teacher.update',$subjectTeacher->id) }}",
 
-        type:'POST',
+        type: "POST",
 
-        data:$(this).serialize(),
+        data: $(this).serialize(),
 
         success:function(res){
 
-            alert(res.message);
+            Swal.fire({
 
-            window.location.href='/subject-teacher';
+                icon: 'success',
+
+                title: 'Success',
+
+                text: 'Updated Successfully',
+
+                timer: 2000,
+
+                showConfirmButton: false
+
+            });
+
+            setTimeout(function(){
+
+                window.location.href =
+                "{{ route('subject-teacher.index') }}";
+
+            },2000);
 
         }
 
@@ -129,4 +171,4 @@ $('#editForm').submit(function(e){
 
 </script>
 
-@endsection
+@endpush

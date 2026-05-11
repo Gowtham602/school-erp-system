@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\ClassController;
 use App\Http\Controllers\Admin\SectionController;
+use App\Http\Controllers\Admin\ClassTeacherController;
 use App\Http\Controllers\Admin\SubjectTeacherController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\DashBoardController;
@@ -61,6 +62,11 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('sections', SectionController::class);
     Route::get('sections-data', [SectionController::class,'data'])
     ->name('sections.data');    
+
+
+    //classes teacher mapping 
+    Route::resource('class-teachers', ClassTeacherController::class);
+    Route::get('get-sections/{class}',[ClassTeacherController::class, 'getSections'])->name('get.sections');
 
 
     //subject 

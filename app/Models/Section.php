@@ -13,7 +13,6 @@ class Section extends Model
     protected $fillable = [
         'class_id',
         'name',
-        'class_teacher_id'
     ];
 
     /*
@@ -28,6 +27,11 @@ class Section extends Model
         return $this->belongsTo(ClassModel::class, 'class_id');
     }
 
+      public function classTeacher()
+    {
+        return $this->hasOne(ClassTeacher::class);
+    }
+
     // Section Teacher
     public function teacher()
     {
@@ -39,4 +43,9 @@ class Section extends Model
     {
         return $this->hasMany(Student::class, 'section_id');
     }
+      public function classModel()
+    {
+        return $this->belongsTo(ClassModel::class, 'class_id' );
+    }
+
 }

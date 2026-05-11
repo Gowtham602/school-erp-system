@@ -2,21 +2,34 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <title>School System</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- // for jquerry datatable  -->
 
+    <!-- BOOTSTRAP -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- DATATABLE -->
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
-</head>
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+
+    <!-- SELECT2 -->
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+
+    <!-- SELECT2 BOOTSTRAP 5 THEME -->
+
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+
+</head>
 
 <body class="bg-light">
 
@@ -29,73 +42,103 @@
         <div class="d-flex flex-grow-1">
 
             {{-- SIDEBAR --}}
+            <div class="d-none d-md-block bg-primary text-white"
+                 style="width:210px; min-height:100vh;">
 
-            <!-- <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar"> -->
-
-            <div class="d-none d-md-block bg-primary text-white" style="width:210px; min-height:100vh;">
                 @include('layouts.sidebar')
+
             </div>
 
             {{-- CONTENT --}}
-            <!-- <div class="flex-grow-1 p-3" style="padding-bottom:80px">
-                 -->
             <div class="flex-grow-1 p-3"
-                style="padding-bottom:80px; overflow-x:auto;">
-                @yield('content')
-            </div>
+                 style="padding-bottom:80px; overflow-x:auto;">
 
+                @yield('content')
+
+            </div>
 
         </div>
 
-
     </div>
-    <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileSidebar">
+
+
+    {{-- MOBILE SIDEBAR --}}
+
+    <div class="offcanvas offcanvas-start d-md-none"
+         tabindex="-1"
+         id="mobileSidebar">
 
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title">Menu</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+
+            <h5 class="offcanvas-title">
+                Menu
+            </h5>
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas">
+            </button>
+
         </div>
 
         <div class="offcanvas-body">
+
             @include('layouts.sidebar')
+
         </div>
 
     </div>
-    {{-- MOBILE --}}
+
+
+    {{-- MOBILE NAV --}}
+
     @include('layouts.mobile-nav')
 
-   
-    <!-- 1. jQuery FIRST -->
-    <!-- jQuery  -->
+
+    <!-- JQUERY -->
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <!-- Bootstrap -->
+    <!-- BOOTSTRAP -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Validation -->
+    <!-- VALIDATION -->
+
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 
-    <!-- SweetAlert -->
+    <!-- SWEETALERT -->
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- DataTables -->
+    <!-- DATATABLE -->
+
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
-    <!-- Buttons -->
+    <!-- BUTTONS -->
+
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
-    <!-- Export -->
+    <!-- EXPORT -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
-    <!--  SELECT2 (MUST BE AFTER JQUERY) -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    <!-- SELECT2 -->
 
-    <!-- @stack('scripts') -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+    {{-- PAGE SCRIPTS --}}
 
     @stack('scripts')
 

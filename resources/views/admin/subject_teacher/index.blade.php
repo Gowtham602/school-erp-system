@@ -5,19 +5,18 @@
 <div class="container mt-4">
 
     <div class="d-flex justify-content-between mb-3">
-        <h4>Subject Teacher</h4>
-
+        <h4>Subject Teacher</h4> 
         <a href="{{ route('subject-teacher.create') }}"
-            class="btn btn-primary">
+           class="btn btn-primary">
             Add
         </a>
     </div>
 
-    <div class="card">
+
+
+    <div class="card shadow">
         <div class="card-body">
-
             <table class="table table-bordered">
-
                 <thead>
                     <tr>
                         <th>S.No</th>
@@ -28,9 +27,7 @@
                         <th width="150">Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
-
                     @foreach($subjectTeachers as $key => $row)
 
                     <tr id="row{{ $row->id }}">
@@ -38,7 +35,7 @@
                         <td>{{ ++$key }}</td>
 
                         <td>
-                            {{ $row->section->class->name }}
+                            {{ $row->section->classModel->name }}
                         </td>
 
                         <td>
@@ -54,16 +51,19 @@
                         </td>
 
                         <td>
-
+                            <!-- EDIT -->
                             <a href="{{ route('subject-teacher.edit',$row->id) }}"
-                                class="btn btn-success btn-sm">
+                               class="btn btn-success btn-sm">
                                 Edit
                             </a>
-
+                            <!-- DELETE -->
                             <button
                                 class="btn btn-danger btn-sm deleteBtn"
+                                data-url="{{ route('subject-teacher.destroy',$row->id) }}"
                                 data-id="{{ $row->id }}">
+
                                 Delete
+
                             </button>
 
                         </td>
@@ -77,46 +77,88 @@
             </table>
 
         </div>
+
     </div>
 
 </div>
 
 @endsection
 
-@section('scripts')
+
+
+
+@push('scripts')
 
 <script>
 
 $('.deleteBtn').click(function(){
 
-    let id = $(this).data('id');
+    let url = $(this).data('url');
 
-    if(confirm('Delete ?')){
+    let id  = $(this).data('id');
 
-        $.ajax({
+    Swal.fire({
 
-            url:'/subject-teacher/'+id,
+        title: 'Are you sure?',
 
-            type:'DELETE',
+        text: "You won't be able to revert this!",
 
-            data:{
-                _token:'{{ csrf_token() }}'
-            },
+        icon: 'warning',
 
-            success:function(res){
+        showCancelButton: true,
 
-                $('#row'+id).remove();
+        confirmButtonColor: '#3085d6',
 
-                alert(res.message);
+        cancelButtonColor: '#d33',
 
-            }
+        confirmButtonText: 'Yes, delete it!'
 
-        });
+    }).then((result) => {
 
-    }
+        if(result.isConfirmed){
 
-});
+            $.ajax({
+
+                url: url, 
+
+                type: 'POST',
+
+                data: {
+
+                    _token: '{{ csrf_token() }}',
+
+                    _method: 'DELETE'
+
+                },
+
+                success:function(res){
+
+                    $('#row'+id).remove();
+
+                    Swal.fire({
+
+                        icon: 'success',
+
+                        title: 'Deleted',
+
+                        text: 'Deleted Successfully',
+
+                        timer: 2000,
+
+                        showConfirmButton: false
+
+                    });
+
+                }
+
+            });
+
+        }
+
+    });
+
+});     
 
 </script>
 
-@endsection
+@endpush

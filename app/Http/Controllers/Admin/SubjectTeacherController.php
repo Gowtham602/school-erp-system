@@ -26,17 +26,13 @@ class SubjectTeacherController extends Controller
         );
     }
 
-
-
     public function create()
     {
         $classes = ClassModel::latest()->get();
-
         $teachers = User::where(
             'role',
             'teacher'
         )->get();
-
         return view(
             'admin.subject_teacher.create',
             compact(
@@ -45,8 +41,6 @@ class SubjectTeacherController extends Controller
             )
         );
     }
-
-
 
     public function store(Request $request)
     {
@@ -73,72 +67,43 @@ class SubjectTeacherController extends Controller
 
 
         return redirect()
-                ->route('subject-teacher.index')
-                ->with(
-                    'success',
-                    'Assigned Successfully'
-                );
+            ->route('subject-teacher.index')
+            ->with(
+                'success',
+                'Assigned Successfully'
+            );
     }
-
-
 
 
     public function edit($id)
     {
         $subjectTeacher = SubjectTeacher::findOrFail($id);
-
         $classes = ClassModel::latest()->get();
-
-        $teachers = User::where(
-            'role',
-            'teacher'
-        )->get();
-
-        return view(
-            'admin.subject_teacher.edit',
-            compact(
-                'subjectTeacher',
-                'classes',
-                'teachers'
-            )
-        );
+        $subjects = Subject::where('class_id',  $subjectTeacher->section->class_id)->get();
+        $sections = Section::where('class_id',   $subjectTeacher->section->class_id)->get();
+        $teachers = User::where('role', 'teacher')->get();
+        return view('admin.subject_teacher.edit', compact('subjectTeacher', 'classes', 'subjects', 'sections', 'teachers'));
     }
-
-
-
 
     public function update(Request $request, $id)
     {
         $request->validate([
-
             'subject_id' => 'required',
-
             'section_id' => 'required',
-
             'teacher_id' => 'required',
-
         ]);
-
-
         $subjectTeacher = SubjectTeacher::findOrFail($id);
-
         $subjectTeacher->update([
-
             'subject_id' => $request->subject_id,
-
             'section_id' => $request->section_id,
-
             'teacher_id' => $request->teacher_id,
-
         ]);
-
-
         return redirect()
-                ->route('subject-teacher.index')
-                ->with(
-                    'success',
-                    'Updated Successfully'
-                );
+            ->route('subject-teacher.index')
+            ->with(
+                'success',
+                'Updated Successfully'
+            );
     }
 
 
@@ -149,11 +114,11 @@ class SubjectTeacherController extends Controller
         SubjectTeacher::findOrFail($id)->delete();
 
         return redirect()
-                ->route('subject-teacher.index')
-                ->with(
-                    'success',
-                    'Deleted Successfully'
-                );
+            ->route('subject-teacher.index')
+            ->with(
+                'success',
+                'Deleted Successfully'
+            );
     }
 
 
