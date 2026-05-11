@@ -21,13 +21,6 @@
         </a>
 
 
-        <!-- TEACHERS -->
-        <a href="{{ route('teachers.index') }}"
-           class="sidebar-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
-
-            <i class="bi bi-person-badge me-2"></i>
-            Teachers
-        </a>
 
 
         <!-- CLASSES -->
@@ -45,6 +38,16 @@
 
             <i class="bi bi-diagram-3 me-2"></i>
             Sections
+        </a>
+
+        <!-- CLASS TEACHER -->
+
+        <a href="{{ route('class-teachers.index') }}"
+        class="sidebar-link {{ request()->routeIs('class-teachers.*') ? 'active' : '' }}">
+
+            <i class="bi bi-person-video3 me-2"></i>
+            Class Teacher
+
         </a>
 
 
@@ -72,6 +75,16 @@
 
             <i class="bi bi-people me-2"></i>
             Students
+        </a>
+
+
+        
+        <!-- TEACHERS -->
+        <a href="{{ route('teachers.index') }}"
+           class="sidebar-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
+
+            <i class="bi bi-person-badge me-2"></i>
+            Teachers
         </a>
 
 
