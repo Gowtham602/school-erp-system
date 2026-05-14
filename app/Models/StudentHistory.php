@@ -19,4 +19,15 @@ class StudentHistory extends Model
     {
         return $this->belongsTo(ClassModel::class, 'class_id');
     }
+
+    public function fromSection()
+    {
+        return $this->belongsTo(Section::class,'from_section_id');
+    }
+
+    public function toSection()
+    {
+        return $this->belongsTo(Section::class,'to_section_id' );
+    }
+
 }

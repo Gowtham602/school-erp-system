@@ -16,12 +16,11 @@ class StudentPromotionController extends Controller
 
     public function index()
     {
-        $classes = ClassModel::with('sections')->get();
+    $classes = ClassModel::with('sections')->get();
 
-        return view(
-            'admin.student_promotions.index',
-            compact('classes')
-        );
+    $histories = StudentHistory::with(['student','fromSection.classModel','toSection.classModel'])->latest()->get();
+
+    return view('admin.student_promotions.index', compact('classes','histories'));
     }
 
 

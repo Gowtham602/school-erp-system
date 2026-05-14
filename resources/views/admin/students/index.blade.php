@@ -47,6 +47,8 @@
 
                     <th>Section</th>
 
+                    <th>Academic Year</th>
+
                     <th>Class Teacher</th>
 
                     <th width="120">Action</th>
@@ -117,6 +119,11 @@ $(document).ready(function(){
             {
                 data:'section',
                 name:'section'
+            },
+            {   
+                data:'academic_year',
+                name:'academic_year'
+
             },
 
             {

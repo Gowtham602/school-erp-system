@@ -24,6 +24,7 @@ class StudentController extends Controller
             'currentAcademic.section.class',
             'currentAcademic.section.teacher'
         ]);
+        // dd($students);
 
         return DataTables::of($students)
 
@@ -44,7 +45,7 @@ class StudentController extends Controller
 
             ->addColumn('teacher', function ($row) {
 
-                return $row->currentAcademic->section->teacher->name ?? '-';
+                return $row->currentAcademic->section->classTeacher->teacher->name ?? '-';
             })
 
             ->addColumn('roll_no', function ($row) {
@@ -230,7 +231,62 @@ class StudentController extends Controller
 
         return view('admin.students.show', compact('student'));
     }
+    public function edit($id)
+{
+    $student = Student::findOrFail($id);
 
+    $sections = Section::with('class')->get();
+
+    return view(
+        'admin.students.edit',
+        compact('student', 'sections')
+    );
+}
+
+
+public function update(Request $request, $id)
+{
+    $student = Student::findOrFail($id);
+
+    $request->validate([
+
+        'first_name' => 'required|string|max:100',
+
+        'phone' => 'required|digits:10',
+
+        'father_name' => 'required',
+
+        'mother_name' => 'required',
+
+        'gender' => 'required',
+
+        'address' => 'required'
+    ]);
+
+    $student->update([
+
+        'first_name' => $request->first_name,
+
+        'last_name' => $request->last_name,
+
+        'gender' => $request->gender,
+
+        'father_name' => $request->father_name,
+
+        'mother_name' => $request->mother_name,
+
+        'phone' => $request->phone,
+
+        'address' => $request->address,
+    ]);
+
+    return response()->json([
+
+        'success' => true,
+
+        'message' => 'Student Updated Successfully'
+    ]);
+}
 
     public function destroy($id)
     {

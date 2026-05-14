@@ -162,7 +162,7 @@
 
                                     <h6 class="fw-bold">
 
-                                        {{ $student->section->class->name ?? '-' }}
+                                        {{ $student->currentAcademic->section->class->name ?? '-' }}
 
                                     </h6>
 
@@ -178,7 +178,7 @@
 
                                     <h6 class="fw-bold">
 
-                                        {{ $student->section->name ?? '-' }}
+                                        {{ $student->currentAcademic->section->name ?? '-' }}
 
                                     </h6>
 
@@ -194,7 +194,7 @@
 
                                     <h6 class="fw-bold">
 
-                                        {{ $student->section->teacher->name ?? '-' }}
+                                        {{ $student->currentAcademic->section->classTeacher->teacher->name ?? '-' }}
 
                                     </h6>
 
