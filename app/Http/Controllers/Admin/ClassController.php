@@ -4,90 +4,211 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClassModel;
+use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ClassController extends Controller
 {
+
+    // INDEX
+
     public function index()
     {
-        return view('admin.classes.index');
+        $totalClasses = ClassModel::count();
+
+        $totalSections = Section::count();
+
+        $activeClasses = ClassModel::count();
+
+        return view(
+            'admin.classes.index',
+            compact(
+                'totalClasses',
+                'totalSections',
+                'activeClasses'
+            )
+        );
     }
+
+
+
+
+    // DATATABLE
 
     public function data()
     {
-        $classes = ClassModel::query();
+        $classes = ClassModel::with('sections')->get();
 
         return datatables()->of($classes)
 
-            ->addColumn('sections_count', function ($row) {
-                return $row->sections()->count();
+            ->addColumn('sections', function ($row) {
+
+                if ($row->sections->count() > 0) {
+
+                    return $row->sections
+                        ->pluck('name')
+                        ->implode(', ');
+                }
+
+                return '-';
             })
 
             ->addColumn('action', function ($row) {
 
-                return '
-                    <a href="'.route('classes.edit',$row->id).'"
-                        class="btn btn-primary btn-sm">
-                        <i class="bi bi-pencil"></i>
-                    </a>
+                $editUrl = route(
+                    'classes.edit',
+                    $row->id
+                );
 
-                    <button data-id="'.$row->id.'"
-                        class="btn btn-danger btn-sm deleteBtn">
-                        <i class="bi bi-trash"></i>
-                    </button>
+                $deleteUrl = route(
+                    'classes.destroy',
+                    $row->id
+                );
+
+                return '
+
+                    <div class="d-flex gap-2">
+
+                        <a href="' . $editUrl . '"
+                            class="btn btn-primary action-btn">
+
+                            <i class="bi bi-pencil"></i>
+
+                        </a>
+
+                        <button
+                            class="btn btn-danger action-btn deleteBtn"
+                            data-url="' . $deleteUrl . '"
+                            data-id="' . $row->id . '">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </div>
+
                 ';
             })
 
-            ->rawColumns(['action'])
+            ->rawColumns([
+                'action'
+            ])
+
             ->make(true);
     }
+
+
+
+
+    // CREATE
 
     public function create()
     {
         return view('admin.classes.create');
     }
 
+
+
+
+    // STORE
+
     public function store(Request $request)
     {
         $request->validate([
+
             'name' => 'required|unique:classes,name'
+
+        ], [
+
+            'name.required' => 'Class name is required.',
+
+            'name.unique' => 'Class name already exists.'
+
         ]);
+
 
         ClassModel::create([
+
             'name' => $request->name
+
         ]);
 
-        return redirect()->route('classes.index');
+
+        return redirect()
+            ->route('classes.index')
+            ->with('success', 'Class Added Successfully');
     }
+
+
+
+
+    // EDIT
 
     public function edit($id)
     {
         $class = ClassModel::findOrFail($id);
 
-        return view('admin.classes.edit', compact('class'));
+        return view(
+            'admin.classes.edit',
+            compact('class')
+        );
     }
+
+
+
+
+    // UPDATE
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|unique:classes,name,'.$id
+
+            'name' => [
+
+                'required',
+
+                Rule::unique('classes')
+                    ->ignore($id)
+
+            ]
+
+        ], [
+
+            'name.required' => 'Class name is required.',
+
+            'name.unique' => 'This class already exists.'
+
         ]);
+
 
         $class = ClassModel::findOrFail($id);
 
         $class->update([
+
             'name' => $request->name
+
         ]);
 
-        return redirect()->route('classes.index');
+
+        return redirect()
+            ->route('classes.index')
+            ->with('success', 'Class Updated Successfully');
     }
+
+
+
+
+    // DELETE
 
     public function destroy($id)
     {
         ClassModel::findOrFail($id)->delete();
 
         return response()->json([
+
             'success' => true
+
         ]);
     }
 }

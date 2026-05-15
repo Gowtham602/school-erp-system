@@ -33,16 +33,18 @@ class SectionController extends Controller
                     $editBtn = '
                         <button
                             class="btn btn-warning btn-sm editBtn"
+                            
                             data-id="'.$row->id.'">
-                            Edit
+                            <i class="bi bi-pencil"></i>
                         </button>
                     ';
 
                     $deleteBtn = '
                         <button
                             class="btn btn-danger btn-sm deleteBtn"
+
                             data-id="'.$row->id.'">
-                            Delete
+                             <i class="bi bi-trash"></i>
                         </button>
                     ';
 
@@ -56,10 +58,10 @@ class SectionController extends Controller
 
         $classes = ClassModel::all();
 
-        return view('admin.sections.index', compact('classes'));
+        return view('admin.sections.index', compact('classes'));  
     }
 
-    // STORE
+    // STORE  
 
     public function store(Request $request)
     {

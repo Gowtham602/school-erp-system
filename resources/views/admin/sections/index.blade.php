@@ -2,38 +2,174 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="container-fluid py-4">
 
-    <div class="card shadow border-0">
+    <!-- PAGE HEADER -->
 
-        <div class="card-header bg-primary text-white d-flex justify-content-between">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <h5 class="mb-0">
+        <div>
+
+            <h3 class="fw-bold mb-1">
+
                 Section Management
-            </h5>
 
-            <button class="btn btn-light btn-sm" id="addBtn">
-                + Add Section
-            </button>
+            </h3>
+
+            <p class="text-muted mb-0">
+
+                Manage class sections easily
+
+            </p>
 
         </div>
 
-        <div class="card-body">
 
-            <table class="table table-bordered" id="sectionTable">
 
-                <thead class="table-dark">
+        <button
+            class="btn btn-primary px-4 py-2 shadow-sm rounded-pill"
+            id="addBtn">
 
-                    <tr>
-                        <th>#</th>
-                        <th>Class</th>
-                        <th>Section</th>
-                        <th width="180">Action</th>
-                    </tr>
+            <i class="bi bi-plus-circle me-2"></i>
 
-                </thead>
+            Add Section
 
-            </table>
+        </button>
+
+    </div>
+
+
+
+
+
+    <!-- STATS -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="modern-card bg-primary text-white">
+
+                <div>
+
+                    <small>Total Sections</small>
+
+                    <h2 class="fw-bold mb-0">
+
+                        {{ \App\Models\Section::count() }}
+
+                    </h2>
+
+                </div>
+
+                <i class="bi bi-diagram-3-fill stat-icon"></i>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-md-4">
+
+            <div class="modern-card bg-success text-white">
+
+                <div>
+
+                    <small>Total Classes</small>
+
+                    <h2 class="fw-bold mb-0">
+
+                        {{ \App\Models\ClassModel::count() }}
+
+                    </h2>
+
+                </div>
+
+                <i class="bi bi-mortarboard-fill stat-icon"></i>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="col-md-4">
+
+            <div class="modern-card bg-dark text-white">
+
+                <div>
+
+                    <small>Academic Management</small>
+
+                    <h2 class="fw-bold mb-0">
+
+                        ERP
+
+                    </h2>
+
+                </div>
+
+                <i class="bi bi-building-fill stat-icon"></i>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <!-- TABLE CARD -->
+
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+        <div class="card-header bg-white border-0 pt-4 px-4">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="bi bi-table me-2 text-primary"></i>
+
+                Sections List
+
+            </h5>
+
+        </div>
+
+
+
+        <div class="card-body p-4">
+
+            <div class="table-responsive">
+
+                <table class="table align-middle modern-table"
+                       id="sectionTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Class</th>
+
+                            <th>Section</th>
+
+                            <th width="180">
+
+                                Action
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                </table>
+
+            </div>
 
         </div>
 
@@ -41,13 +177,17 @@
 
 </div>
 
-{{-- MODAL --}}
+
+
+
+
+<!-- MODAL -->
 
 <div class="modal fade" id="sectionModal" tabindex="-1">
 
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
 
-        <div class="modal-content">
+        <div class="modal-content border-0 rounded-4 overflow-hidden">
 
             <form id="sectionForm">
 
@@ -55,38 +195,53 @@
 
                 <input type="hidden" id="section_id">
 
-                <div class="modal-header bg-primary text-white">
+                <!-- HEADER -->
 
-                    <h5 class="modal-title">
+                <div class="modal-header border-0 bg-primary text-white p-4">
+
+                    <h5 class="modal-title fw-bold">
+
                         Section Form
+
                     </h5>
 
-                    <button
-                        type="button"
-                        class="btn-close btn-close-white"
-                        data-bs-dismiss="modal">
-                    </button>
+                    <button type="button"
+                            class="btn-close btn-close-white"
+                            data-bs-dismiss="modal"></button>
 
                 </div>
 
-                <div class="modal-body">
 
-                    {{-- CLASS --}}
+
+                <!-- BODY -->
+
+                <div class="modal-body p-4">
+
+                    <!-- CLASS -->
 
                     <div class="mb-3">
 
-                        <label>Class</label>
+                        <label class="form-label fw-semibold">
 
-                        <select id="class_id" class="form-select">
+                            Class
+
+                        </label>
+
+                        <select id="class_id"
+                                class="form-select modern-input">
 
                             <option value="">
+
                                 Select Class
+
                             </option>
 
                             @foreach($classes as $class)
 
                             <option value="{{ $class->id }}">
+
                                 {{ $class->name }}
+
                             </option>
 
                             @endforeach
@@ -97,16 +252,22 @@
 
                     </div>
 
-                    {{-- NAME --}}
+
+
+                    <!-- SECTION -->
 
                     <div class="mb-3">
 
-                        <label>Section Name</label>
+                        <label class="form-label fw-semibold">
 
-                        <input
-                            type="text"
-                            id="name"
-                            class="form-control">
+                            Section Name
+
+                        </label>
+
+                        <input type="text"
+                               id="name"
+                               class="form-control modern-input"
+                               placeholder="Enter Section Name">
 
                         <small class="text-danger error_name"></small>
 
@@ -114,14 +275,16 @@
 
                 </div>
 
-                <div class="modal-footer">
 
-                    <button
-                        type="submit"
-                        class="btn btn-success"
-                        id="saveBtn">
 
-                        Save
+                <!-- FOOTER -->
+
+                <div class="modal-footer border-0 px-4 pb-4">
+
+                    <button type="submit"
+                            class="btn btn-primary px-4 rounded-pill">
+
+                        Save Section
 
                     </button>
 
@@ -136,13 +299,26 @@
 </div>
 
 @endsection
-
-
 @push('scripts')
 
 <script>
 
 $(document).ready(function () {
+
+    // CSRF
+
+    $.ajaxSetup({
+
+        headers: {
+
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+        }
+
+    });
+
+
+
 
     // DATATABLE
 
@@ -152,31 +328,60 @@ $(document).ready(function () {
 
         serverSide: true,
 
+        responsive: true,
+
         ajax: "{{ route('sections.index') }}",
 
         columns: [
 
             {
                 data: 'DT_RowIndex',
+
                 name: 'DT_RowIndex',
+
                 orderable: false,
+
                 searchable: false
             },
 
+
+
             {
                 data: 'class_name',
+
                 name: 'class_name'
             },
 
+
+
             {
                 data: 'name',
-                name: 'name'
+
+                name: 'name',
+
+                render:function(data){
+
+                    return `
+
+                        <span class="badge bg-primary px-3 py-2 rounded-pill">
+
+                            ${data}
+
+                        </span>
+
+                    `;
+                }
             },
+
+
 
             {
                 data: 'action',
+
                 name: 'action',
+
                 orderable: false,
+
                 searchable: false
             }
 
@@ -184,13 +389,11 @@ $(document).ready(function () {
 
     });
 
-    // MODAL
 
-    let modal = new bootstrap.Modal(
-        document.getElementById('sectionModal')
-    );
 
-    // ADD
+
+
+    // ADD BUTTON
 
     $('#addBtn').click(function () {
 
@@ -198,19 +401,23 @@ $(document).ready(function () {
 
         $('#section_id').val('');
 
-        $('.text-danger').text('');
+        $('.text-danger').html('');
 
-        modal.show();
+        $('#sectionModal').modal('show');
 
     });
 
-    // STORE + UPDATE
+
+
+
+
+    // SAVE / UPDATE
 
     $('#sectionForm').submit(function (e) {
 
         e.preventDefault();
 
-        $('.text-danger').text('');
+        $('.text-danger').html('');
 
         let id = $('#section_id').val();
 
@@ -219,47 +426,42 @@ $(document).ready(function () {
                 .replace(':id', id)
             : "{{ route('sections.store') }}";
 
-        let type = id ? 'PUT' : 'POST';
+        let method = id ? 'PUT' : 'POST';
 
         $.ajax({
 
             url: url,
 
-            type: type,
+            type: method,
 
             data: {
-                _token: "{{ csrf_token() }}",
+
                 class_id: $('#class_id').val(),
+
                 name: $('#name').val()
+
             },
 
             success: function (response) {
 
-                modal.hide();
-
-                $('#sectionForm')[0].reset();
+                $('#sectionModal').modal('hide');
 
                 table.ajax.reload();
-
-                Swal.fire({
-                    icon: 'success',
-                    title: response.message,
-                    timer: 1500,
-                    showConfirmButton: false
-                });
 
             },
 
             error: function (xhr) {
 
-                let errors = xhr.responseJSON.errors;
+                if(xhr.status === 422){
 
-                if(errors.class_id){
-                    $('.error_class_id').text(errors.class_id[0]);
-                }
+                    let errors = xhr.responseJSON.errors;
 
-                if(errors.name){
-                    $('.error_name').text(errors.name[0]);
+                    $.each(errors, function(key, value){
+
+                        $('.error_' + key).html(value[0]);
+
+                    });
+
                 }
 
             }
@@ -267,6 +469,10 @@ $(document).ready(function () {
         });
 
     });
+
+
+
+
 
     // EDIT
 
@@ -274,22 +480,24 @@ $(document).ready(function () {
 
         let id = $(this).data('id');
 
+        let url = "{{ route('sections.edit', ':id') }}"
+            .replace(':id', id);
+
         $.ajax({
 
-            url: "{{ route('sections.edit', ':id') }}"
-                    .replace(':id', id),
+            url: url,
 
             type: 'GET',
 
-            success: function (data) {
+            success: function (response) {
 
-                $('#section_id').val(data.id);
+                $('#section_id').val(response.id);
 
-                $('#class_id').val(data.class_id);
+                $('#class_id').val(response.class_id);
 
-                $('#name').val(data.name);
+                $('#name').val(response.name);
 
-                modal.show();
+                $('#sectionModal').modal('show');
 
             }
 
@@ -297,55 +505,36 @@ $(document).ready(function () {
 
     });
 
+
+
+
+
     // DELETE
 
     $(document).on('click', '.deleteBtn', function () {
 
         let id = $(this).data('id');
 
-        Swal.fire({
+        let url = "{{ route('sections.destroy', ':id') }}"
+            .replace(':id', id);
 
-            title: 'Are you sure?',
+        if(confirm('Delete this section?')){
 
-            icon: 'warning',
+            $.ajax({
 
-            showCancelButton: true,
+                url: url,
 
-            confirmButtonText: 'Delete'
+                type: 'DELETE',
 
-        }).then((result) => {
+                success: function (response) {
 
-            if (result.isConfirmed) {
+                    table.ajax.reload();
 
-                $.ajax({
+                }
 
-                    url: "{{ route('sections.destroy', ':id') }}"
-                            .replace(':id', id),
+            });
 
-                    type: 'DELETE',
-
-                    data: {
-                        _token: "{{ csrf_token() }}"
-                    },
-
-                    success: function (response) {
-
-                        table.ajax.reload();
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: response.message,
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
-
-                    }
-
-                });
-
-            }
-
-        });
+        }
 
     });
 

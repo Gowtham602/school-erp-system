@@ -195,7 +195,7 @@
                             Phone
                         </label>
 
-                        <input type="text"
+                        <input type="number"
                                name="phone"
                                class="form-control">
 
