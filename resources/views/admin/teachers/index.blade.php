@@ -2,52 +2,41 @@
 
 @section('content')
 
-<div class="card shadow border-0 h-100 d-flex flex-column">
+<div class="container-fluid py-4">
 
-    <!-- HEADER -->
-    <div class="card-header bg-white">
+    <!-- PAGE HEADER -->
+    <div class="card border-0 shadow-sm mb-4">
 
-        <div class="row align-items-center">
+        <div class="card-body bg-primary text-white rounded">
 
-            <!-- LEFT -->
-            <div class="col-md-6 mb-2 mb-md-0">
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
 
-                <div class="d-flex gap-2">
+                <div>
 
-                    <button type="button"
-                            id="activeBtn"
-                            class="btn btn-primary btn-sm w-50">
+                    <h3 class="fw-bold mb-1">
 
-                        <i class="bi bi-people-fill"></i>
-                        Active Teachers
+                        <i class="bi bi-person-workspace"></i>
+                        Teacher Management
 
-                    </button>
+                    </h3>
 
-
-                    <button type="button"
-                            id="deletedBtn"
-                            class="btn btn-secondary btn-sm w-50">
-
-                        <i class="bi bi-trash"></i>
-                        Deleted History
-
-                    </button>
+                    <p class="mb-0">
+                        Manage Active & Deleted Teachers
+                    </p>
 
                 </div>
 
-            </div>
+                <div>
 
+                    <a href="{{ route('teachers.create') }}"
+                       class="btn btn-light fw-bold">
 
-            <!-- RIGHT -->
-            <div class="col-md-6 text-md-end">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        Add Teacher
 
-                <a href="{{ route('teachers.create') }}"
-                   class="btn btn-success btn-sm">
+                    </a>
 
-                    <i class="bi bi-plus-circle"></i>
-                    Add Teacher
-
-                </a>
+                </div>
 
             </div>
 
@@ -56,35 +45,90 @@
     </div>
 
 
-    <!-- TABLE -->
-    <div class="card-body overflow-auto">
 
-        <table id="teacherTable"
-               class="table table-bordered table-hover align-middle w-100">
+    <!-- MAIN CARD -->
+    <div class="card border-0 shadow-sm">
 
-            <thead class="table-dark">
+        <!-- CARD HEADER -->
+        <div class="card-header bg-white border-0 py-3">
 
-                <tr>
+            <div class="row">
 
-                    <th width="70">SNo</th>
+                <div class="col-md-5">
 
-                    <th>Name</th>
+                    <div class="btn-group w-100">
 
-                    <th>Email</th>
+                        <!-- ACTIVE -->
+                        <button type="button"
+                                id="activeBtn"
+                                class="btn btn-primary">
 
-                    <th>Phone</th>
+                            <i class="bi bi-people-fill"></i>
+                            Active Teachers
 
-                    <th>Qualification</th>
+                        </button>
 
-                    <th>Status</th>
 
-                    <th width="180">Action</th>
+                        <!-- DELETED -->
+                        <button type="button"
+                                id="deletedBtn"
+                                class="btn btn-outline-danger">
 
-                </tr>
+                            <i class="bi bi-trash3-fill"></i>
+                            Deleted History
 
-            </thead>
+                        </button>
 
-        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TABLE -->
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table id="teacherTable"
+                       class="table table-hover align-middle w-100">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th width="70">SNo</th>
+
+                            <th>Name</th>
+
+                            <th>Email</th>
+
+                            <th>Phone</th>
+
+                            <th>Qualification</th>
+
+                            <th>Status</th>
+
+                            <th width="150"
+                                class="text-center">
+
+                                Action
+
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                </table>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -94,11 +138,58 @@
 
 
 
+
+@push('styles')
+
+<style>
+
+    body{
+        background:#f4f6f9;
+    }
+
+    .table th{
+        vertical-align:middle;
+        font-size:14px;
+    }
+
+    .table td{
+        vertical-align:middle;
+        font-size:14px;
+    }
+
+    .table tbody tr:hover{
+        background:#f8fbff;
+        transition:0.2s;
+    }
+
+    .dataTables_wrapper .dataTables_filter input{
+
+        border:1px solid #ccc;
+
+        border-radius:8px;
+
+        padding:5px 10px;
+    }
+
+    .dataTables_wrapper .dataTables_length select{
+
+        border-radius:8px;
+    }
+
+</style>
+
+@endpush
+
+
+
+
+
+
 @push('scripts')
 
 <script>
 
-let type = 'active';
+let typeTable = 'active';
 
 let table;
 
@@ -115,88 +206,122 @@ $(document).ready(function () {
 
     table = $('#teacherTable').DataTable({
 
-        processing: true,
+        processing:true,
 
-        serverSide: true,
+        serverSide:true,
 
         responsive:true,
 
-        ajax: {
+        ajax:{
 
-            url: "{{ route('teachers.data') }}",
+            url:"{{ route('teachers.data') }}",
 
-            data: function (d) {
+            data:function(d){
 
-                d.type = type;
+                d.type = typeTable;
             }
         },
 
-        columns: [
+
+
+        columns:[
 
             {
-                data: null,
+                data:null,
 
-                orderable: false,
+                orderable:false,
 
-                searchable: false,
+                searchable:false,
 
-                render: function (data, type, row, meta) {
+                render:function(data,type,row,meta){
 
                     return meta.row +
                         meta.settings._iDisplayStart + 1;
                 }
             },
 
-            {
-                data: 'name'
-            },
+
 
             {
-                data: 'email'
+                data:'name',
+                name:'name'
             },
 
-            {
-                data: 'phone'
-            },
+
 
             {
-                data: 'qualification'
+                data:'email',
+                name:'email'
             },
 
+
+
             {
-                data: 'status',
+                data:'phone',
+                name:'phone'
+            },
+
+
+
+            {
+                data:'qualification',
+                name:'qualification'
+            },
+
+
+
+            {
+                data:'status',
 
                 render:function(data){
 
-                    if(data == 'active')
+                    // DELETED
+                    if(typeTable == 'deleted')
                     {
                         return `
-                            <span class="badge bg-success">
-                                Active
+
+                            <span class="badge bg-danger">
+
+                                Deleted
+
                             </span>
+
                         `;
                     }
 
+                    // ACTIVE
                     return `
-                        <span class="badge bg-danger">
-                            Inactive
+
+                        <span class="badge bg-success">
+
+                            Active
+
                         </span>
+
                     `;
                 }
             },
 
+
+
             {
-                data: 'id',
+                data:'id',
 
-                orderable: false,
+                orderable:false,
 
-                searchable: false,
+                searchable:false,
 
-                render: function (data, typeRow, row) {
+                className:'text-center',
 
+                render:function(data,type,row){
 
-                    // DELETED HISTORY
-                    if (type === 'deleted')
+                    /*
+                    |--------------------------------------------------------------------------
+                    | DELETED TABLE
+                    |--------------------------------------------------------------------------
+                    */
+
+                    if(typeTable == 'deleted')
                     {
                         return `
 
@@ -212,69 +337,119 @@ $(document).ready(function () {
                     }
 
 
-                    // ACTIVE
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | ACTIVE TABLE
+                    |--------------------------------------------------------------------------
+                    */
+
+                    let editUrl =
+                        "{{ route('teachers.edit', ':id') }}";
+
+                    editUrl =
+                        editUrl.replace(':id', data);
+
                     return `
 
-                        <a href="/admin/teachers/${data}/edit"
+                        <a href="${editUrl}"
                            class="btn btn-primary btn-sm">
 
-                            <i class="bi bi-pencil-square"></i>
+                            <i class="bi bi-pencil-fill"></i>
 
                         </a>
+
 
 
                         <button
                             onclick="deleteTeacher(${data})"
                             class="btn btn-danger btn-sm">
 
-                            <i class="bi bi-trash"></i>
+                            <i class="bi bi-trash-fill"></i>
 
                         </button>
 
                     `;
                 }
             }
+
         ]
+
     });
 
 
 
 
-   
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACTIVE BUTTON
+    |--------------------------------------------------------------------------
+    */
 
     $('#activeBtn').click(function(){
 
-        type = 'active';
+        typeTable = 'active';
+
+
 
         $('#activeBtn')
-            .removeClass('btn-secondary')
+
+            .removeClass('btn-outline-primary')
+
             .addClass('btn-primary');
 
+
+
         $('#deletedBtn')
-            .removeClass('btn-primary')
-            .addClass('btn-secondary');
+
+            .removeClass('btn-danger')
+
+            .addClass('btn-outline-danger');
+
+
 
         table.ajax.reload();
+
     });
 
 
 
 
-    
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | DELETED BUTTON
+    |--------------------------------------------------------------------------
+    */
 
     $('#deletedBtn').click(function(){
 
-        type = 'deleted';
+        typeTable = 'deleted';
+
+
 
         $('#deletedBtn')
-            .removeClass('btn-secondary')
-            .addClass('btn-primary');
+
+            .removeClass('btn-outline-danger')
+
+            .addClass('btn-danger');
+
+
 
         $('#activeBtn')
+
             .removeClass('btn-primary')
-            .addClass('btn-secondary');
+
+            .addClass('btn-outline-primary');
+
+
 
         table.ajax.reload();
+
     });
 
 });
@@ -283,40 +458,51 @@ $(document).ready(function () {
 
 
 
+
+
+/*
+|--------------------------------------------------------------------------
+| DELETE TEACHER
+|--------------------------------------------------------------------------
+*/
+
 function deleteTeacher(id)
 {
+
     Swal.fire({
 
-        title: 'Are you sure?',
+        title:'Are you sure?',
 
-        text: "Teacher will be deleted!",
+        text:'Teacher will move to deleted history',
 
-        icon: 'warning',
+        icon:'warning',
 
-        showCancelButton: true,
+        showCancelButton:true,
 
-        confirmButtonColor: '#d33',
+        confirmButtonColor:'#dc3545',
 
-        confirmButtonText: 'Yes, Delete'
+        confirmButtonText:'Yes Delete'
+
     })
 
-    .then((result) => {
+    .then((result)=>{
 
-        if (result.isConfirmed)
+        if(result.isConfirmed)
         {
+
             $.ajax({
 
-                url: '/admin/teachers/' + id,
+                url:"{{ url('admin/teachers') }}/" + id,
 
-                type: 'DELETE',
+                type:'DELETE',
 
-                data: {
+                data:{
 
-                    _token: '{{ csrf_token() }}'
+                    _token:'{{ csrf_token() }}'
                 },
 
-                success: function (response)
-                {
+                success:function(response){
+
                     Swal.fire({
 
                         icon:'success',
@@ -342,26 +528,38 @@ function deleteTeacher(id)
 
 
 
+
+
+/*
+|--------------------------------------------------------------------------
+| RESTORE TEACHER
+|--------------------------------------------------------------------------
+*/
+
 function restoreTeacher(id)
 {
+
     Swal.fire({
 
-        title: 'Restore Teacher?',
+        title:'Restore Teacher?',
 
-        icon: 'question',
+        icon:'question',
 
-        showCancelButton: true,
+        showCancelButton:true,
 
-        confirmButtonText: 'Restore'
+        confirmButtonText:'Restore'
+
     })
 
-    .then((result) => {
+    .then((result)=>{
 
         if(result.isConfirmed)
         {
+
             $.ajax({
 
-                url:'/admin/teachers/restore/' + id,
+                url:"{{ route('teachers.restore', ':id') }}"
+                        .replace(':id', id),
 
                 type:'POST',
 
@@ -386,6 +584,7 @@ function restoreTeacher(id)
                     });
 
                     table.ajax.reload();
+
                 }
             });
         }

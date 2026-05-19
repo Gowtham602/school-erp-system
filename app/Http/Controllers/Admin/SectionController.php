@@ -22,7 +22,24 @@ class SectionController extends Controller
         if ($request->ajax()) {
 
             $sections = Section::with('classModel')
-                ->latest();
+
+                ->join('classes', 'sections.class_id', '=', 'classes.id')
+
+                ->select('sections.*')
+
+                ->orderByRaw("
+
+        CASE
+
+            WHEN classes.name = 'LKG' THEN -1
+
+            WHEN classes.name = 'UKG' THEN 0
+
+            ELSE CAST(classes.name AS UNSIGNED)
+
+        END ASC
+
+    ");
 
 
 
@@ -50,7 +67,7 @@ class SectionController extends Controller
 
                         <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-semibold">
 
-                            '.$row->name.'
+                            ' . $row->name . '
 
                         </span>
 
@@ -61,9 +78,9 @@ class SectionController extends Controller
 
                 // SEARCH CLASS
 
-                ->filterColumn('class_name', function($query, $keyword) {
+                ->filterColumn('class_name', function ($query, $keyword) {
 
-                    $query->whereHas('classModel', function($q) use ($keyword){
+                    $query->whereHas('classModel', function ($q) use ($keyword) {
 
                         $q->where(
                             'name',
@@ -87,7 +104,7 @@ class SectionController extends Controller
 
                             <button
                                 class="btn btn-light border shadow-sm rounded-circle editBtn"
-                                data-id="'.$row->id.'"
+                                data-id="' . $row->id . '"
                                 title="Edit"
                                 style="width:42px;height:42px;">
 
@@ -99,7 +116,7 @@ class SectionController extends Controller
 
                             <button
                                 class="btn btn-light border shadow-sm rounded-circle deleteBtn"
-                                data-id="'.$row->id.'"
+                                data-id="' . $row->id . '"
                                 title="Delete"
                                 style="width:42px;height:42px;">
 
@@ -127,14 +144,27 @@ class SectionController extends Controller
         // PAGE COUNTS
 
         $totalSections = Section::count();
-                                            
+
         $totalClasses = ClassModel::count();
 
 
 
         // DROPDOWN CLASSES
 
-        $classes = ClassModel::latest()->get();
+        // $classes = ClassModel::latest()->get();
+        $classes = ClassModel::orderByRaw("
+
+    CASE
+
+        WHEN name = 'LKG' THEN -1
+
+        WHEN name = 'UKG' THEN 0
+
+        ELSE CAST(name AS UNSIGNED)
+
+    END ASC
+
+")->get();
 
 
 

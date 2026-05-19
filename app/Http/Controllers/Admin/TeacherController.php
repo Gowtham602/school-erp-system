@@ -247,11 +247,69 @@ class TeacherController extends Controller
     // }
  // TeacherController.php
 
+// public function data(Request $request)
+// {
+//     $type = $request->type ?? 'active';
+
+//     $query = TeacherDetail::with('user');
+
+//     if ($type == 'deleted') {
+
+//         $query = $query->onlyTrashed();
+
+//     } else {
+
+//         $query = $query->whereNull('deleted_at');
+//     }
+
+//     return DataTables::of($query)
+
+//         ->addColumn('name', function ($row) {
+
+//             return optional($row->user)->name;
+//         })
+
+//         ->addColumn('email', function ($row) {
+
+//             return optional($row->user)->email;
+//         })
+
+//         ->addColumn('phone', function ($row) {
+
+//             return $row->phone;
+//         })
+
+//         ->addColumn('qualification', function ($row) {
+
+//             return $row->qualification;
+//         })
+
+//         ->addColumn('status', function ($row) {
+
+//             return $row->status;
+//         })
+
+//         ->addColumn('id', function ($row) {
+
+//             // IMPORTANT
+//             return $row->id;
+//         })
+
+//         ->make(true);
+// }
 public function data(Request $request)
 {
     $type = $request->type ?? 'active';
 
-    $query = TeacherDetail::with('user');
+    $query = TeacherDetail::with([
+
+        'user' => function($q){
+
+            $q->withTrashed();
+        }
+    ]);
+
+
 
     if ($type == 'deleted') {
 
@@ -261,6 +319,8 @@ public function data(Request $request)
 
         $query = $query->whereNull('deleted_at');
     }
+
+
 
     return DataTables::of($query)
 
@@ -291,7 +351,6 @@ public function data(Request $request)
 
         ->addColumn('id', function ($row) {
 
-            // IMPORTANT
             return $row->id;
         })
 

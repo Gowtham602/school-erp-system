@@ -13,92 +13,189 @@ class ClassController extends Controller
 
     // INDEX
 
-    public function index()
-    {
-        $totalClasses = ClassModel::count();
+   public function index()
+{
+    $totalClasses = ClassModel::count();
 
-        $totalSections = Section::count();
+    $totalSections = Section::count();
 
-        $activeClasses = ClassModel::count();
+    $activeClasses = ClassModel::count();
 
-        return view(
-            'admin.classes.index',
-            compact(
-                'totalClasses',
-                'totalSections',
-                'activeClasses'
-            )
-        );
-    }
+
+
+    // CLASS ORDER
+    $classes = ClassModel::orderByRaw("
+
+        CASE
+
+            WHEN name = 'LKG' THEN -1
+
+            WHEN name = 'UKG' THEN 0
+
+            ELSE CAST(name AS UNSIGNED)
+
+        END ASC
+
+    ")->get();
+
+
+
+    return view(
+        'admin.classes.index',
+
+        compact(
+
+            'classes',
+
+            'totalClasses',
+
+            'totalSections',
+
+            'activeClasses'
+        )
+    );
+}
 
 
 
 
     // DATATABLE
 
+    // public function data()
+    // {
+    //     $classes = ClassModel::with('sections')->get();
+
+    //     return datatables()->of($classes)
+
+    //         ->addColumn('sections', function ($row) {
+
+    //             if ($row->sections->count() > 0) {
+
+    //                 return $row->sections
+    //                     ->pluck('name')
+    //                     ->implode(', ');
+    //             }
+
+    //             return '-';
+    //         })
+
+    //         ->addColumn('action', function ($row) {
+
+    //             $editUrl = route(
+    //                 'classes.edit',
+    //                 $row->id
+    //             );
+
+    //             $deleteUrl = route(
+    //                 'classes.destroy',
+    //                 $row->id
+    //             );
+
+    //             return '
+
+    //                 <div class="d-flex gap-2">
+
+    //                     <a href="' . $editUrl . '"
+    //                         class="btn btn-primary action-btn">
+
+    //                         <i class="bi bi-pencil"></i>
+
+    //                     </a>
+
+    //                     <button
+    //                         class="btn btn-danger action-btn deleteBtn"
+    //                         data-url="' . $deleteUrl . '"
+    //                         data-id="' . $row->id . '">
+
+    //                         <i class="bi bi-trash"></i>
+
+    //                     </button>
+
+    //                 </div>
+
+    //             ';
+    //         })
+
+    //         ->rawColumns([
+    //             'action'
+    //         ])
+
+    //         ->make(true);
+    // }
+
     public function data()
-    {
-        $classes = ClassModel::with('sections')->get();
+{
+    $classes = ClassModel::with('sections')
 
-        return datatables()->of($classes)
+        ->orderByRaw("
 
-            ->addColumn('sections', function ($row) {
+            CASE
 
-                if ($row->sections->count() > 0) {
+                WHEN name = 'LKG' THEN -1
 
-                    return $row->sections
-                        ->pluck('name')
-                        ->implode(', ');
-                }
+                WHEN name = 'UKG' THEN 0
 
-                return '-';
-            })
+                ELSE CAST(name AS UNSIGNED)
 
-            ->addColumn('action', function ($row) {
+            END ASC
 
-                $editUrl = route(
-                    'classes.edit',
-                    $row->id
-                );
+        ");
 
-                $deleteUrl = route(
-                    'classes.destroy',
-                    $row->id
-                );
+    return datatables()->of($classes)
 
-                return '
+        ->addColumn('sections', function ($row) {
 
-                    <div class="d-flex gap-2">
+            if ($row->sections->count() > 0) {
 
-                        <a href="' . $editUrl . '"
-                            class="btn btn-primary action-btn">
+                return $row->sections
+                    ->pluck('name')
+                    ->implode(', ');
+            }
 
-                            <i class="bi bi-pencil"></i>
+            return '-';
+        })
 
-                        </a>
+        ->addColumn('action', function ($row) {
 
-                        <button
-                            class="btn btn-danger action-btn deleteBtn"
-                            data-url="' . $deleteUrl . '"
-                            data-id="' . $row->id . '">
+            $editUrl = route(
+                'classes.edit',
+                $row->id
+            );
 
-                            <i class="bi bi-trash"></i>
+            $deleteUrl = route(
+                'classes.destroy',
+                $row->id
+            );
 
-                        </button>
+            return '
 
-                    </div>
+                <div class="d-flex gap-2">
 
-                ';
-            })
+                    <a href="' . $editUrl . '"
+                        class="btn btn-primary action-btn">
 
-            ->rawColumns([
-                'action'
-            ])
+                        <i class="bi bi-pencil"></i>
 
-            ->make(true);
-    }
+                    </a>
 
+                    <button
+                        class="btn btn-danger action-btn deleteBtn"
+                        data-url="' . $deleteUrl . '"
+                        data-id="' . $row->id . '">
 
+                        <i class="bi bi-trash"></i>
+
+                    </button>
+
+                </div>
+
+            ';
+        })
+
+        ->rawColumns(['action'])
+
+        ->make(true);
+}
 
 
     // CREATE

@@ -2,68 +2,162 @@
 
 @section('content')
 
-<div class="card shadow border-0">
+<div class="container-fluid py-3">
 
-    <!-- HEADER -->
-    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <!-- TOP ERP HEADER -->
+    <div class="card border-0 shadow-lg mb-4">
 
-        <h5 class="mb-0">
+        <div class="card-body bg-primary text-white rounded">
 
-            <i class="bi bi-people"></i>
-            Students
+            <div class="d-flex justify-content-between align-items-center flex-wrap">
 
-        </h5>
+                <div>
+                    <h2 class="fw-bold mb-1">
+                        <i class="bi bi-mortarboard-fill"></i>
+                        School ERP - Students
+                    </h2>
 
-        <a href="{{ route('students.create') }}"
-           class="btn btn-light btn-sm">
+                    <p class="mb-0">
+                        Manage all student records easily
+                    </p>
+                </div>
 
-            <i class="bi bi-plus-circle"></i>
-            Add Student
+                <div class="mt-2 mt-md-0">
 
-        </a>
+                    <a href="{{ route('students.create') }}"
+                       class="btn btn-light fw-bold shadow-sm">
+
+                        <i class="bi bi-plus-circle-fill"></i>
+                        Add Student
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 
-    <!-- BODY -->
-    <div class="card-body">
+    <!-- MAIN CARD -->
+    <div class="card border-0 shadow-lg">
 
-        <table class="table table-bordered table-hover align-middle"
-               id="studentTable">
+        <!-- HEADER -->
+        <div class="card-header bg-white border-0 py-3">
 
-            <thead class="table-dark">
+            <div class="d-flex justify-content-between align-items-center">
 
-                <tr>
+                <h4 class="mb-0 fw-bold text-primary">
 
-                    <th width="70">S No</th>
+                    <i class="bi bi-people-fill"></i>
+                    Student List
 
-                    <th>Name</th>
+                </h4>
 
-                    <th>Father</th>
+                <span class="badge bg-primary fs-6 px-3 py-2">
 
-                    <th>Phone</th>
+                    ERP System
 
-                    <th>Class</th>
+                </span>
 
-                    <th>Section</th>
+            </div>
 
-                    <th>Academic Year</th>
+        </div>
 
-                    <th>Class Teacher</th>
 
-                    <th width="120">Action</th>
+        <!-- BODY -->
+        <div class="card-body">
 
-                </tr>
+            <div class="table-responsive">
 
-            </thead>
+                <table class="table table-hover align-middle"
+                       id="studentTable"
+                       width="100%">
 
-        </table>
+                    <thead class="table-primary">
+
+                        <tr>
+
+                            <th>S No</th>
+
+                            <th>Name</th>
+
+                            <th>Father</th>
+
+                            <th>Phone</th>
+
+                            <th>Class</th>
+
+                            <th>Section</th>
+
+                            <th>Academic Year</th>
+
+                            <th>Class Teacher</th>
+
+                            <th class="text-center">Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                </table>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
 @endsection
+
+
+
+@push('styles')
+
+<style>
+
+    .table th {
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .table td {
+        vertical-align: middle;
+        font-size: 14px;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        padding: 5px 10px;
+    }
+
+    .dataTables_wrapper .dataTables_length select {
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    table.dataTable tbody tr:hover {
+        background-color: #f5f9ff;
+        transition: 0.2s;
+    }
+
+</style>
+
+@endpush
 
 
 
@@ -78,6 +172,8 @@ $(document).ready(function(){
         processing:true,
 
         serverSide:true,
+
+        responsive:true,
 
         ajax:"{{ route('students.data') }}",
 
@@ -120,10 +216,10 @@ $(document).ready(function(){
                 data:'section',
                 name:'section'
             },
-            {   
+
+            {
                 data:'academic_year',
                 name:'academic_year'
-
             },
 
             {
@@ -134,10 +230,12 @@ $(document).ready(function(){
             {
                 data:'action',
                 orderable:false,
-                searchable:false
+                searchable:false,
+                className:'text-center'
             }
 
         ]
+
     });
 
 
