@@ -2,8 +2,7 @@
 
 @section('content')
 
-<div class="container-fluid py-3">
-
+<div class="container-fluid">
     <!-- TOP STATS -->
 
     <div class="row mb-4">
@@ -82,7 +81,7 @@
 
         <!-- ACTIVE CLASSES -->
 
-        <div class="col-md-4 mb-3">
+        <!-- <div class="col-md-4 mb-3">
 
             <div class="card border-0 shadow-sm dashboard-card bg-dark text-white">
 
@@ -112,100 +111,149 @@
 
             </div>
 
-        </div>
+        </div> -->
 
     </div>
 
-
-
-
-
-    <!-- MAIN CARD -->
-
-    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+    <div class="card shadow border-0">
 
         <!-- HEADER -->
-
-        <div class="card-header custom-header d-flex justify-content-between align-items-center bg-primary text-white">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
 
             <div>
 
-                <h4 class="mb-0 fw-bold text-blue ">
+                <h4 class="mb-0 fw-bold">
 
-                    <i class="bi bi-mortarboard-fill me-2"></i>
-
+                    <i class="bi bi-mortarboard-fill"></i>
                     Class Management
 
                 </h4>
 
-                <small class="text-light">
-
-                    Manage classes and sections
-
-                </small>
+                <small>Manage classes and sections</small>
 
             </div>
 
-
-
-            <a href="{{ route('classes.create') }}"
-                class="btn btn-light fw-semibold px-4">
+            <!-- ADD BUTTON -->
+            <button class="btn btn-light fw-semibold"
+                id="addClassBtn">
 
                 <i class="bi bi-plus-circle"></i>
-
                 Add Class
 
-            </a>
+            </button>
 
         </div>
 
-
-
         <!-- BODY -->
+        <div class="card-body">
 
-        <div class="card-body bg-white p-4">
+            <table class="table table-bordered align-middle"
+                id="classesTable">
 
-            <div class="table-responsive">
+                <thead class="table-light">
 
-                <table
-                    class="table align-middle custom-table"
-                    id="classTable">
+                    <tr>
 
-                    <thead>
+                        <th>#</th>
+                        <th>Class</th>
+                        <th>Sections</th>
+                        <th width="150">Actions</th>
 
-                        <tr>
+                    </tr>
 
-                            <th width="70">
+                </thead>
 
-                                #
+            </table>
 
-                            </th>
+        </div>
 
-                            <th>
+    </div>
 
-                                Class
+</div>
 
-                            </th>
 
-                            <th>
 
-                                Sections
 
-                            </th>
 
-                            <th width="150">
+<!-- MODAL -->
+<div class="modal fade"
+    id="classModal"
+    tabindex="-1">
 
-                                Actions
+    <div class="modal-dialog modal-dialog-centered">
 
-                            </th>
+        <div class="modal-content border-0 shadow-lg">
 
-                        </tr>
+            <!-- HEADER -->
+            <div class="modal-header bg-primary text-white">
 
-                    </thead>
+                <h5 class="modal-title fw-bold"
+                    id="modalTitle">
 
-                </table>
+                    Add Class
+
+                </h5>
+
+                <button type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"></button>
 
             </div>
+
+            <!-- FORM -->
+            <form id="classForm">
+
+                @csrf
+
+                <input type="hidden"
+                    id="class_id">
+
+                <div class="modal-body">
+
+                    <!-- CLASS NAME -->
+                    <div class="mb-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Class Name
+
+                        </label>
+
+                        <input type="text"
+                            name="name"
+                            id="name"
+                            class="form-control"
+                            placeholder="Enter Class Name">
+
+                        <small class="text-danger"
+                            id="name_error"></small>
+
+                    </div>
+
+                </div>
+
+                <!-- FOOTER -->
+                <div class="modal-footer">
+
+                    <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+
+                        Close
+
+                    </button>
+
+                    <button type="submit"
+                        class="btn btn-success">
+
+                        <i class="bi bi-check-circle"></i>
+                        Save
+
+                    </button>
+
+                </div>
+
+            </form>
 
         </div>
 
@@ -218,173 +266,19 @@
 
 
 
-
-
-@push('styles')
-
-<style>
-    .dashboard-card {
-
-        border-radius: 20px;
-
-        transition: 0.3s;
-    }
-
-
-    .dashboard-card:hover {
-
-        transform: translateY(-5px);
-    }
-
-
-    .icon-box {
-
-        width: 60px;
-        height: 60px;
-
-        border-radius: 15px;
-
-        background: rgba(255, 255, 255, 0.2);
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        font-size: 28px;
-    }
-
-
-    .custom-header {
-
-        background: linear-gradient(135deg,
-                #0d6efd,
-                #0056d6);
-
-        padding: 20px 25px;
-    }
-
-
-    .custom-table thead {
-
-        background: #111827;
-
-        color: white;
-    }
-
-
-    .custom-table thead th {
-
-        padding: 16px;
-
-        border: none;
-
-        font-size: 14px;
-
-        text-transform: uppercase;
-
-        letter-spacing: 0.5px;
-    }
-
-
-    .custom-table tbody tr {
-
-        transition: 0.2s;
-    }
-
-
-    .custom-table tbody tr:hover {
-
-        background: #f8fbff;
-    }
-
-
-    .custom-table tbody td {
-
-        padding: 16px;
-
-        vertical-align: middle;
-    }
-
-
-    .class-badge {
-
-        background: #eef4ff;
-
-        color: #0d6efd;
-
-        padding: 8px 14px;
-
-        border-radius: 30px;
-
-        font-weight: 600;
-
-        display: inline-block;
-    }
-
-
-    .section-badge {
-
-        background: #f1f5f9;
-
-        color: #111827;
-
-        padding: 6px 12px;
-
-        border-radius: 20px;
-
-        margin-right: 5px;
-
-        display: inline-block;
-
-        font-size: 13px;
-
-        font-weight: 600;
-    }
-
-
-    .action-btn {
-
-        width: 38px;
-        height: 38px;
-
-        border-radius: 10px;
-
-        display: inline-flex;
-
-        align-items: center;
-        justify-content: center;
-    }
-
-
-    .dataTables_wrapper .dataTables_filter input {
-
-        border-radius: 10px;
-        border: 1px solid #dbe2ea;
-
-        padding: 8px 12px;
-    }
-
-
-    .dataTables_wrapper .dataTables_length select {
-
-        border-radius: 10px;
-        border: 1px solid #dbe2ea;
-    }
-</style>
-
-@endpush
-
-
-
-
-
-
 @push('scripts')
+
+<!-- TOASTR -->
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script>
     $(document).ready(function() {
 
-        $('#classTable').DataTable({
+        // DATATABLE
+        let table = $('#classesTable').DataTable({
 
             processing: true,
 
@@ -395,135 +289,29 @@
             columns: [
 
                 {
-                    data: null,
-
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
                     orderable: false,
-
-                    searchable: false,
-
-                    render: function(data, type, row, meta) {
-
-                        return `
-
-                        <span class="fw-bold text-primary">
-
-                            ${meta.row + meta.settings._iDisplayStart + 1}
-
-                        </span>
-
-                    `;
-                    }
+                    searchable: false
                 },
-
-
 
                 {
                     data: 'name',
-
-                    name: 'name',
-
-                    render: function(data) {
-
-                        return `
-
-                        <span class="class-badge">
-
-                            Class ${data}
-
-                        </span>
-
-                    `;
-                    }
+                    name: 'name'
                 },
-
-
 
                 {
                     data: 'sections',
-
                     name: 'sections',
-
                     orderable: false,
-
-                    searchable: false,
-
-                    render: function(data) {
-
-                        if (data == '-' || data == '') {
-
-                            return `
-
-                            <span class="text-muted">
-
-                                No Sections
-
-                            </span>
-
-                        `;
-                        }
-
-                        let sections = data.split(',');
-
-                        let badges = '';
-
-                        sections.forEach(function(section) {
-
-                            badges += `
-
-                            <span class="section-badge">
-
-                                ${section.trim()}
-
-                            </span>
-
-                        `;
-                        });
-
-                        return badges;
-                    }
+                    searchable: false
                 },
-
-
 
                 {
                     data: 'action',
-
+                    name: 'action',
                     orderable: false,
-
-                    searchable: false,
-
-                    render: function(data, type, row) {
-
-                        let editUrl = "{{ route('classes.edit', ':id') }}"
-                            .replace(':id', row.id);
-
-                        let deleteUrl = "{{ route('classes.destroy', ':id') }}"
-                            .replace(':id', row.id);
-
-                        return `
-
-                        <div class="d-flex gap-2">
-
-                            <a href="${editUrl}"
-                               class="btn btn-primary action-btn">
-
-                                <i class="bi bi-pencil"></i>
-
-                            </a>
-
-                            <button
-                                class="btn btn-danger action-btn deleteBtn"
-                                data-url="${deleteUrl}"
-                                data-id="${row.id}">
-
-                                <i class="bi bi-trash"></i>
-
-                            </button>
-
-                        </div>
-
-                    `;
-                    }
+                    searchable: false
                 }
 
             ]
@@ -534,34 +322,194 @@
 
 
 
-        // DELETE
+        // MODAL
+        let modal = new bootstrap.Modal(
+            document.getElementById('classModal')
+        );
 
-        $(document).on('click', '.deleteBtn', function() {
 
-            let deleteUrl = $(this).data('url');
 
-            if (confirm('Delete this class?')) {
 
-                $.ajax({
 
-                    url: deleteUrl,
+        // ADD
+        $('#addClassBtn').click(function() {
 
-                    type: 'DELETE',
+            $('#classForm')[0].reset();
 
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
+            $('#class_id').val('');
 
-                    success: function() {
+            $('#modalTitle').text('Add Class');
 
-                        $('#classTable')
-                            .DataTable()
-                            .ajax.reload();
+            $('.text-danger').text('');
+
+            modal.show();
+
+        });
+
+        //deleted 
+
+        $(document).on('click', '.deleteBtn', function () {
+
+    let id = $(this).data('id');
+
+    Swal.fire({
+
+        title: 'Are you sure?',
+
+        text: "You won't be able to revert this!",
+
+        icon: 'warning',
+
+        showCancelButton: true,
+
+        confirmButtonColor: '#d33',
+
+        cancelButtonColor: '#3085d6',
+
+        confirmButtonText: 'Yes, delete it!'
+
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+
+            $.ajax({
+
+                url: "{{ route('classes.destroy', ':id') }}"
+                    .replace(':id', id),
+
+                type: "POST",
+
+                data: {
+
+                    _token: "{{ csrf_token() }}",
+
+                    _method: "DELETE"
+
+                },
+
+                success: function (response) {
+
+                    toastr.success('Class Deleted Successfully');
+
+                    $('#classesTable')
+                        .DataTable()
+                        .ajax.reload();
+
+                }
+
+            });
+
+        }
+
+    });
+
+});
+
+
+
+        // EDIT
+        $(document).on('click', '.editBtn', function() {
+
+            let id = $(this).data('id');
+
+            let name = $(this).data('name');
+
+            $('#class_id').val(id);
+
+            $('#name').val(name);
+
+            $('#modalTitle').text('Edit Class');
+
+            $('.text-danger').text('');
+
+            modal.show();
+
+        });
+
+
+
+
+
+        // SAVE
+        $('#classForm').submit(function(e) {
+
+            e.preventDefault();
+
+            $('.text-danger').text('');
+
+            let id = $('#class_id').val();
+
+            let formData = new FormData(this);
+
+            let url = '';
+            let method = '';
+
+
+
+            if (id == '') {
+
+                url = "{{ route('classes.store') }}";
+
+                method = "POST";
+
+            } else {
+
+                url = "{{ route('classes.update', ':id') }}";
+
+                url = url.replace(':id', id);
+
+                formData.append('_method', 'PUT');
+
+                method = "POST";
+
+            }
+
+
+
+            $.ajax({
+
+                url: url,
+
+                type: method,
+
+                data: formData,
+
+                processData: false,
+
+                contentType: false,
+
+
+
+                success: function(response) {
+
+                    modal.hide();
+
+                    toastr.success(response.message);
+
+                    table.ajax.reload();
+
+                },
+
+
+
+                error: function(xhr) {
+
+                    if (xhr.status === 422) {
+
+                        let errors = xhr.responseJSON.errors;
+
+                        if (errors.name) {
+
+                            $('#name_error').text(errors.name[0]);
+
+                        }
 
                     }
 
-                });
-            }
+                }
+
+            });
+
         });
 
     });
