@@ -6,46 +6,44 @@
 
     <!-- HEADER -->
 
-    <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-4">
+   <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
 
-        <div class="card-body bg-primary text-white p-4">
+    <div class="card-body bg-primary text-white py-3 px-4">
 
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-                <div>
+            <div>
 
-                    <h2 class="fw- mb-1">
+                <h4 class="fw-bold mb-1">
 
-                        <i class="bi bi-book-half me-2"></i>
+                    <i class="bi bi-book-half me-2"></i>
 
-                        Subject Management
+                    Subject Management
 
-                    </h2>
+                </h4>
 
-                    <p class="mb-0 opacity-75">
+                <small class="opacity-75">
 
-                        Manage class subjects professionally
+                    Manage class subjects professionally
 
-                    </p>
-
-                </div>
-
-
-
-                <a href="{{ route('subjects.create') }}"
-                    class="btn btn-light btn-lg rounded-pill px-4 shadow-sm">
-
-                    <i class="bi bi-plus-circle-fill me-2"></i>
-
-                    Add Subject
-
-                </a>
+                </small>
 
             </div>
+
+            <a href="{{ route('subjects.create') }}"
+               class="btn btn-light rounded-pill px-3 py-2 shadow-sm">
+
+                <i class="bi bi-plus-circle-fill me-1"></i>
+
+                Add Subject
+
+            </a>
 
         </div>
 
     </div>
+
+</div>
 
 
 
@@ -57,7 +55,7 @@
 
         <!-- TOTAL SUBJECTS -->
 
-        <div class="col-md-6 mb-3">
+        <div class="col-md-4 mb-3">
 
             <div class="card border-0 shadow-sm rounded-4 h-100">
 
@@ -69,7 +67,7 @@
 
                             Total Subjects
 
-                        </small>
+                        </small>    
 
                         <h2 class="fw-bold mt-2 mb-0">
 
@@ -81,7 +79,7 @@
 
 
 
-                    <div class="bg-primary bg-opacity-10 text-primary rounded-4 p-3">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-4 p-1">
 
                         <i class="bi bi-journal-bookmark-fill fs-2"></i>
 
@@ -97,7 +95,7 @@
 
         <!-- TOTAL CLASSES -->
 
-        <div class="col-md-6 mb-3">
+        <div class="col-md-4 mb-3">
 
             <div class="card border-0 shadow-sm rounded-4 h-100">
 
@@ -121,7 +119,7 @@
 
 
 
-                    <div class="bg-success bg-opacity-10 text-success rounded-4 p-3">
+                    <div class="bg-success bg-opacity-10 text-success rounded-4 p-1">
 
                         <i class="bi bi-mortarboard-fill fs-2"></i>
 

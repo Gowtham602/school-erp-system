@@ -8,45 +8,41 @@
 
     <div class="row mb-4">
 
-        <div class="col-12">
+    <div class="col-12">
 
-            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
-                <div class="card-body bg-primary text-white p-4">
+            <div class="card-body bg-primary text-white py-3 px-4">
 
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-                        <div>
+                    <div>
 
-                            <h2 class="fw mb-1">
+                        <h4 class="fw-bold mb-1">
 
-                                <i class="bi bi-person-workspace me-2"></i>
+                            <i class="bi bi-person-workspace me-2"></i>
 
-                                Class Teacher Management
+                            Class Teacher Management
 
-                            </h2>
+                        </h4>
 
-                            <p class="mb-0 opacity-75">
+                        <small class="opacity-75">
 
-                                Manage class teacher mappings professionally
+                            Manage class teacher mappings professionally
 
-                            </p>
-
-                        </div>
-
-
-
-                        <button
-                            class="btn btn-light btn-lg rounded-pill px-4 shadow-sm"
-                            id="addBtn">
-
-                            <i class="bi bi-plus-circle-fill me-2"></i>
-
-                            Add Mapping
-
-                        </button>
+                        </small>
 
                     </div>
+
+                    <button
+                        class="btn btn-light rounded-pill px-3 py-2 shadow-sm"
+                        id="addBtn">
+
+                        <i class="bi bi-plus-circle-fill me-1"></i>
+
+                        Add Mapping
+
+                    </button>
 
                 </div>
 
@@ -55,6 +51,8 @@
         </div>
 
     </div>
+
+</div>
 
 
 

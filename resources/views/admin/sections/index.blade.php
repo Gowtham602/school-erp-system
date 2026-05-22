@@ -5,48 +5,46 @@
 <div class="container-fluid py-4">
 
     <!-- HEADER -->
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
 
-    <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-4">
+    <div class="card-body bg-primary text-white py-3 px-4">
 
-        <div class="card-body bg-primary text-white p-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
-            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
 
-                <div>
+                <h4 class="fw-bold mb-1">
 
-                    <h2 class="fw-bold mb-1">
+                    <i class="bi bi-diagram-3-fill me-2"></i>
 
-                        <i class="bi bi-diagram-3-fill me-2"></i>
+                    Section Management
 
-                        Section Management
+                </h4>
 
-                    </h2>
+                <small class="opacity-75">
 
-                    <p class="mb-0 opacity-75">
+                    Manage class sections professionally
 
-                        Manage class sections professionally
-
-                    </p>
-
-                </div>
-
-
-
-                <button
-                    class="btn btn-light btn-lg rounded-pill px-4 shadow-sm"
-                    id="addBtn">
-
-                    <i class="bi bi-plus-circle-fill me-2"></i>
-
-                    Add Section
-
-                </button>
+                </small>
 
             </div>
+
+            <button
+                class="btn btn-light rounded-pill px-3 py-2 shadow-sm"
+                id="addBtn">
+
+                <i class="bi bi-plus-circle-fill me-1"></i>
+
+                Add Section
+
+            </button>
 
         </div>
 
     </div>
+
+</div>
+    
 
 
 

@@ -43,7 +43,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Admission No
+                            Admission No <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -59,7 +59,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Roll No
+                            Roll No <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -74,7 +74,7 @@
                   
                     <div class="col-md-4 mb-3">
 
-                        <label>Academic Year</label>
+                        <label>Academic Year<span class="text-danger">*</span></label>
 
                         <select name="academic_year" class="form-control">
 
@@ -97,7 +97,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            First Name
+                            First Name <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -128,7 +128,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Section
+                            Section <span class="text-danger">*</span>
                         </label>
 
                         <select name="section_id"
@@ -160,7 +160,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Gender
+                            Gender <span class="text-danger">*</span>
                         </label>
 
                         <select name="gender"
@@ -193,7 +193,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Phone
+                            Phone <span class="text-danger">*</span>
                         </label>
 
                         <input type="number"
@@ -225,7 +225,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            DOB
+                            DOB 
                         </label>
 
                         <input type="date"
@@ -241,7 +241,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Father Name
+                            Father Name <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -257,7 +257,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Mother Name
+                            Mother Name <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -273,7 +273,7 @@
                     <div class="col-md-12 mb-3">
 
                         <label class="form-label">
-                            Address
+                            Address <span class="text-danger">*</span>
                         </label>
 
                         <textarea name="address"

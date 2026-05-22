@@ -42,7 +42,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Admission No
+                            Admission No <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -59,13 +59,13 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Roll No
+                            Roll No <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
                                name="roll_no"
                                class="form-control"
-                               value="{{ $student->roll_no }}">
+                              value="{{ $student->currentAcademic->roll_no ?? '' }}">
 
                         <div class="invalid-feedback"></div>
 
@@ -76,7 +76,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Section
+                            Section <span class="text-danger">*</span>
                         </label>
 
                         <select name="section_id"
@@ -89,7 +89,7 @@
                             @foreach($sections as $section)
 
                                 <option value="{{ $section->id }}"
-                                    {{ $student->section_id == $section->id ? 'selected' : '' }}>
+                                   {{ ($student->currentAcademic->section_id ?? '') == $section->id ? 'selected' : '' }}>
 
                                     {{ $section->class->name }}
                                     -
@@ -110,7 +110,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            First Name
+                            First Name <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -127,7 +127,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Last Name
+                            Last Name 
                         </label>
 
                         <input type="text"
@@ -144,7 +144,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Gender
+                            Gender <span class="text-danger">*</span>
                         </label>
 
                         <select name="gender"
@@ -180,7 +180,7 @@
                     <div class="col-md-4 mb-3">
 
                         <label class="form-label">
-                            Phone
+                            Phone <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -231,7 +231,7 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
-                            Father Name
+                            Father Name <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -248,7 +248,7 @@
                     <div class="col-md-6 mb-3">
 
                         <label class="form-label">
-                            Mother Name
+                            Mother Name <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
@@ -265,7 +265,7 @@
                     <div class="col-md-12 mb-3">
 
                         <label class="form-label">
-                            Address
+                            Address  <span class="text-danger">*</span>
                         </label>
 
                         <textarea name="address"

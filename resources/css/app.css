@@ -2,6 +2,7 @@
 @import "bootstrap-icons/font/bootstrap-icons.css";
 @import "./admin/section.css";
 @import "./admin/custom.css";
+@import "./admin/dashboard.css";
 
 @tailwind base;
 @tailwind components;

@@ -9,6 +9,7 @@ use App\Models\StudentAcademic;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
@@ -231,9 +232,22 @@ class StudentController extends Controller
 
         return view('admin.students.show', compact('student'));
     }
-    public function edit($id)
+//     public function edit($id)
+// {
+//     $student = Student::findOrFail($id);
+
+//     $sections = Section::with('class')->get();
+
+//     return view(
+//         'admin.students.edit',
+//         compact('student', 'sections')
+//     );
+// }
+
+public function edit($id)
 {
-    $student = Student::findOrFail($id);
+    $student = Student::with('currentAcademic')
+        ->findOrFail($id);
 
     $sections = Section::with('class')->get();
 
@@ -243,12 +257,21 @@ class StudentController extends Controller
     );
 }
 
-
 public function update(Request $request, $id)
 {
-    $student = Student::findOrFail($id);
+    // dd($request);
+    $student = Student::with('currentAcademic')
+        ->findOrFail($id);
 
-    $request->validate([
+         $request->validate([
+        'admission_no' => [
+                'required',
+                Rule::unique('students')
+                    ->ignore($student->id),
+            ],
+        'section_id' => 'required|exists:sections,id',
+
+        'roll_no' => 'required',
 
         'first_name' => 'required|string|max:100',
 
@@ -263,29 +286,74 @@ public function update(Request $request, $id)
         'address' => 'required'
     ]);
 
-    $student->update([
+    DB::beginTransaction();
 
-        'first_name' => $request->first_name,
+    try {
 
-        'last_name' => $request->last_name,
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE STUDENT
+        |--------------------------------------------------------------------------
+        */
 
-        'gender' => $request->gender,
+        $student->update([
+            'admission_no' =>$request->admission_no,
+            'first_name' => $request->first_name,
 
-        'father_name' => $request->father_name,
+            'last_name' => $request->last_name,
 
-        'mother_name' => $request->mother_name,
+            'gender' => $request->gender,
 
-        'phone' => $request->phone,
+            'father_name' => $request->father_name,
 
-        'address' => $request->address,
-    ]);
+            'mother_name' => $request->mother_name,
 
-    return response()->json([
+            'phone' => $request->phone,
 
-        'success' => true,
+            'email' => $request->email,
 
-        'message' => 'Student Updated Successfully'
-    ]);
+            'dob' => $request->dob,
+
+            'address' => $request->address,
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE STUDENT ACADEMIC
+        |--------------------------------------------------------------------------
+        */
+
+        if ($student->currentAcademic) {
+
+            $student->currentAcademic->update([
+
+                'section_id' => $request->section_id,
+
+                'roll_no' => $request->roll_no,
+            ]);
+        }
+
+        DB::commit();
+
+        return response()->json([
+
+            'success' => true,
+
+            'message' => 'Student Updated Successfully'
+        ]);
+
+    } catch (\Exception $e) {
+
+        DB::rollBack();
+
+        return response()->json([
+
+            'success' => false,
+
+            'message' => $e->getMessage()
+        ]);
+    }
 }
 
     public function destroy($id)

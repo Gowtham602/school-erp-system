@@ -30,7 +30,47 @@
     <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
 </head>
+<style>
 
+#toast-container > .toast-success{
+    background:#198754 !important;
+    color:#fff !important;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(25,135,84,0.25);
+}
+
+#toast-container > .toast-error{
+    background:#dc3545 !important;
+    color:#fff !important;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(220,53,69,0.25);
+}
+
+#toast-container > .toast-warning{
+    background:#ffc107 !important;
+    color:#000 !important;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(255,193,7,0.25);
+}
+
+#toast-container > .toast-info{
+    background:#0dcaf0 !important;
+    color:#fff !important;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(13,202,240,0.25);
+}
+
+.toast{
+    opacity:1 !important;
+    padding:15px 18px !important;
+    font-size:14px;
+}
+
+.toast-title{
+    font-weight:700;
+}
+
+</style>
 <body class="bg-light">
 
     <div class="d-flex flex-column min-vh-100">
