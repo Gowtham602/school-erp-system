@@ -71,37 +71,7 @@
                     </div>
 
 
-                    <!-- Section -->
-                    <div class="col-md-4 mb-3">
-
-                        <label class="form-label">
-                            Section
-                        </label>
-
-                        <select name="section_id"
-                                class="form-select">
-
-                            <option value="">
-                                Select Section
-                            </option>
-
-                            @foreach($sections as $section)
-
-                                <option value="{{ $section->id }}">
-
-                                    {{ $section->class->name }}
-                                    -
-                                    {{ $section->name }}
-
-                                </option>
-
-                            @endforeach
-
-                        </select>
-
-                        <div class="invalid-feedback"></div>
-
-                    </div>
+                  
                     <div class="col-md-4 mb-3">
 
                         <label>Academic Year</label>
@@ -154,6 +124,37 @@
 
                     </div>
 
+                      <!-- Section -->
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Section
+                        </label>
+
+                        <select name="section_id"
+                                class="form-select">
+
+                            <option value="">
+                                Select Section
+                            </option>
+
+                            @foreach($sections as $section)
+
+                                <option value="{{ $section->id }}">
+
+                                    {{ $section->class->name }}
+                                    -
+                                    {{ $section->name }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                        <div class="invalid-feedback"></div>
+
+                    </div>
 
                     <!-- Gender -->
                     <div class="col-md-4 mb-3">

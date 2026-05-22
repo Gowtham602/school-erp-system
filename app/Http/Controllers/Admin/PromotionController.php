@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ClassModel;
-use App\Models\StudentHistory;
 use App\Models\StudentAcademic;
+use App\Models\StudentHistory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PromotionController extends Controller
 {
@@ -17,158 +18,250 @@ class PromotionController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function index()
-    {
-        $classes = ClassModel::with('sections')->get();
+    // public function index()
+    // {
+        
+    //     $classes = ClassModel::with('sections')->get();
 
-        $histories = StudentHistory::with([
+    //    $histories = StudentHistory::with([
 
-            'student',
-            'fromSection.classModel',
-            'toSection.classModel'
+    //     'student',
+    //     'fromSection.classModel',
+    //     'toSection.classModel'
 
-        ])
-        ->latest()
-        ->limit(10)
-        ->get();
+    // ])
+    // ->latest()
+    // ->paginate(10);
 
-        return view(
-            'admin.promotion.index',
-            compact('classes', 'histories')
-        );
-    }
-
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROMOTE STUDENTS
-    |--------------------------------------------------------------------------
-    */
-
-    public function promote(Request $request)
-    {
-        $request->validate([
-
-            'from_section' => 'required|exists:sections,id',
-
-            'to_section' =>
-                'required|exists:sections,id|different:from_section',
-
-            'academic_year' => 'required',
-
-            'new_academic_year' => 'required',
-        ]);
+    //     return view(
+    //         'admin.promotion.index',
+    //         compact('classes', 'histories')
+    //     );
+    // }
 
 
-        DB::beginTransaction();
+    // /*
+    // |--------------------------------------------------------------------------
+    // | FETCH STUDENTS
+    // |--------------------------------------------------------------------------
+    // */
 
-        try {
+    // public function getStudents(Request $request)
+    // {
+    //     $request->validate([
 
-            /*
-            |--------------------------------------------------------------------------
-            | GET CURRENT YEAR STUDENTS
-            |--------------------------------------------------------------------------
-            */
+    //         'from_section' =>
+    //             'required|exists:sections,id',
 
-            $students = StudentAcademic::where(
-
-                    'section_id',
-                    $request->from_section
-
-                )
-                ->where(
-
-                    'academic_year',
-                    $request->academic_year
-
-                )
-                ->where(
-
-                    'status',
-                    'studying'
-
-                )
-                ->get();
+    //         'academic_year' =>
+    //             'required',
+    //     ]);
 
 
+    //     $students = StudentAcademic::with([
 
-            /*
-            |--------------------------------------------------------------------------
-            | LOOP STUDENTS
-            |--------------------------------------------------------------------------
-            */
+    //             'student',
+    //             'section'
 
-            foreach ($students as $academic) {
-
-                /*
-                |--------------------------------------------------------------------------
-                | OLD RECORD UPDATE
-                |--------------------------------------------------------------------------
-                */
-
-                $academic->update([
-
-                    'status' => 'promoted'
-                ]);
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | NEW YEAR ENTRY
-                |--------------------------------------------------------------------------
-                */
-
-                StudentAcademic::create([
-
-                    'student_id' => $academic->student_id,
-
-                    'section_id' => $request->to_section,
-
-                    'academic_year' =>
-                        $request->new_academic_year,
-
-                    'roll_no' => $academic->roll_no,
-
-                    'status' => 'studying'
-                ]);
+    //         ])
+    //         ->where(
+    //             'section_id',
+    //             $request->from_section
+    //         )
+    //         ->where(
+    //             'academic_year',
+    //             $request->academic_year
+    //         )
+    //         ->where(
+    //             'status',
+    //             'studying'
+    //         )
+    //         ->get();
 
 
-                /*
-                |--------------------------------------------------------------------------
-                | HISTORY SAVE
-                |--------------------------------------------------------------------------
-                */
+    //     if ($students->isEmpty()) {
 
-                StudentHistory::create([
+    //         return response()->json([
 
-                    'student_id' => $academic->student_id,
+    //             'status' => false,
 
-                    'from_section_id' =>
-                        $request->from_section,
-
-                    'to_section_id' =>
-                        $request->to_section,
-
-                    'academic_year' =>
-                        $request->new_academic_year,
-                ]);
-            }
+    //             'message' =>
+    //                 'No students found'
+    //         ]);
+    //     }
 
 
-            DB::commit();
+    //     return response()->json([
 
-            return back()->with(
+    //         'status' => true,
 
-                'success',
-                'Students promoted successfully'
-            );
+    //         'students' => $students
+    //     ]);
+    // }
 
-        } catch (\Exception $e) {
 
-            DB::rollBack();
 
-            dd($e->getMessage());
-        }
-    }
+    // /*
+    // |--------------------------------------------------------------------------
+    // | PROMOTE STUDENTS
+    // |--------------------------------------------------------------------------
+    // */
+
+    // public function promote(Request $request)
+    // {
+    //     $request->validate([
+
+    //         'from_section' =>
+    //             'required|exists:sections,id',
+
+    //         'to_section' =>
+    //             'required|exists:sections,id|different:from_section',
+
+    //         'academic_year' =>
+    //             'required',
+
+    //         'new_academic_year' =>
+    //             'required|different:academic_year',
+
+    //         'students' =>
+    //             'required|array',
+
+    //         'students.*' =>
+    //             'exists:student_academics,id',
+    //     ]);
+
+
+    //     DB::beginTransaction();
+
+    //     try {
+
+    //         $academics = StudentAcademic::whereIn(
+    //                 'id',
+    //                 $request->students
+    //             )
+    //             ->where(
+    //                 'status',
+    //                 'studying'
+    //             )
+    //             ->get();
+
+
+    //         if ($academics->isEmpty()) {
+
+    //             return back()->with(
+
+    //                 'error',
+    //                 'No students selected'
+    //             );
+    //         }
+
+
+    //         foreach ($academics as $academic) {
+
+    //             /*
+    //             |--------------------------------------------------------------------------
+    //             | CHECK ALREADY PROMOTED
+    //             |--------------------------------------------------------------------------
+    //             */
+
+    //             $alreadyPromoted = StudentAcademic::where(
+
+    //                     'student_id',
+    //                     $academic->student_id
+
+    //                 )
+    //                 ->where(
+
+    //                     'academic_year',
+    //                     $request->new_academic_year
+
+    //                 )
+    //                 ->exists();
+
+
+    //             if ($alreadyPromoted) {
+
+    //                 continue;
+    //             }
+
+
+    //             /*
+    //             |--------------------------------------------------------------------------
+    //             | UPDATE OLD RECORD
+    //             |--------------------------------------------------------------------------
+    //             */
+
+    //             $academic->update([
+
+    //                 'status' => 'promoted'
+    //             ]);
+
+
+    //             /*
+    //             |--------------------------------------------------------------------------
+    //             | CREATE NEW ACADEMIC
+    //             |--------------------------------------------------------------------------
+    //             */
+
+    //             StudentAcademic::create([
+
+    //                 'student_id' =>
+    //                     $academic->student_id,
+
+    //                 'section_id' =>
+    //                     $request->to_section,
+
+    //                 'academic_year' =>
+    //                     $request->new_academic_year,
+
+    //                 'roll_no' => null,
+
+    //                 'status' => 'studying'
+    //             ]);
+
+
+    //             /*
+    //             |--------------------------------------------------------------------------
+    //             | SAVE HISTORY
+    //             |--------------------------------------------------------------------------
+    //             */
+
+    //             StudentHistory::create([
+
+    //                 'student_id' =>
+    //                     $academic->student_id,
+
+    //                 'from_section_id' =>
+    //                     $request->from_section,
+
+    //                 'to_section_id' =>
+    //                     $request->to_section,
+
+    //                 'academic_year' =>
+    //                     $request->new_academic_year,
+    //             ]);
+    //         }
+
+
+    //         DB::commit();
+
+    //         return back()->with(
+
+    //             'success',
+    //             'Students promoted successfully'
+    //         );
+
+    //     } catch (\Exception $e) {
+
+    //         DB::rollBack();
+
+    //         Log::error($e);
+
+    //         return back()->with(
+
+    //             'error',
+    //             'Something went wrong'
+    //         );
+    //     }
+    // }
 }

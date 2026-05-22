@@ -105,6 +105,21 @@ Route::post('student-promotions/promote',
 
 });
 
+// Route::controller(PromotionController::class)
+//     ->prefix('promotions')
+//     ->name('promotions.')
+//     ->group(function () {
+
+//         Route::get('/', 'index')
+//             ->name('index');
+
+//         Route::post('/get-students', 'getStudents')
+//             ->name('getStudents');
+
+//         Route::post('/promote', 'promote')
+//             ->name('promote');
+//     });
+
 // // use App\Http\Controllers\Admin\TeacherController;
 // Route::prefix('admin')->middleware(['auth'])->group(function () {
 

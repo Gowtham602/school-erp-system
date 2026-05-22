@@ -1,303 +1,409 @@
 @extends('layouts.app')
 
+@section('title', 'Student Promotion')
+
+
+
+
 @section('content')
 
-<div class="container mt-4">
+<div class="container-fluid py-4">
 
-    <div class="card shadow">
+    <!-- ============================================= -->
+    <!-- PAGE TITLE -->
+    <!-- ============================================= -->
 
-        <div class="card-header bg-primary text-white">
+    <div class="mb-4">
 
-            <h4 class="mb-0">
+        <h2 class="page-title">
+            Student Promotion
+        </h2>
 
-                Student Promotion
+        <div class="sub-title">
+            Manage student promotions and promotion history
+        </div>
 
-            </h4>
+    </div>
+
+
+
+    <!-- ============================================= -->
+    <!-- TABS -->
+    <!-- ============================================= -->
+
+    <ul class="nav nav-pills mb-4">
+
+        <li class="nav-item">
+
+            <button
+                class="nav-link active"
+                data-bs-toggle="pill"
+                data-bs-target="#promotion_tab"
+                type="button"
+            >
+
+                <i class="bi bi-arrow-repeat"></i>
+
+                Promotion
+
+            </button>
+
+        </li>
+
+
+
+        <li class="nav-item ms-2">
+
+            <button
+                class="nav-link"
+                data-bs-toggle="pill"
+                data-bs-target="#history_tab"
+                type="button"
+            >
+
+                <i class="bi bi-clock-history"></i>
+
+                Promotion History
+
+            </button>
+
+        </li>
+
+    </ul>
+
+
+
+    <div class="tab-content">
+
+        <!-- ============================================= -->
+        <!-- PROMOTION TAB -->
+        <!-- ============================================= -->
+
+        <div
+            class="tab-pane fade show active"
+            id="promotion_tab"
+        >
+
+            <div class="card custom-card">
+
+                <div class="card-header-custom">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-mortarboard-fill"></i>
+
+                        Student Promotion Panel
+
+                    </h5>
+
+                </div>
+
+
+
+                <div class="card-body p-4">
+
+                    <form
+                        action="{{ route('student.promotions.promote') }}"
+                        method="POST"
+                        id="promotionForm"
+                    >
+
+                        @csrf
+
+
+                        <!-- ================================= -->
+                        <!-- FILTERS -->
+                        <!-- ================================= -->
+
+                        <div class="row g-3">
+
+                            <!-- CURRENT YEAR -->
+
+                            <div class="col-md-3">
+
+                                <label class="form-label fw-semibold">
+
+                                    Current Academic Year
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="academic_year"
+                                    class="form-control custom-input"
+                                    placeholder="2025-2026"
+                                >
+
+                            </div>
+
+
+
+                            <!-- NEW YEAR -->
+
+                            <div class="col-md-3">
+
+                                <label class="form-label fw-semibold">
+
+                                    New Academic Year
+
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="new_academic_year"
+                                    class="form-control custom-input"
+                                    placeholder="2026-2027"
+                                >
+
+                            </div>
+
+
+
+                            <!-- FROM SECTION -->
+
+                            <div class="col-md-3">
+
+                                <label class="form-label fw-semibold">
+
+                                    From Section
+
+                                </label>
+
+                                <select
+                                    name="from_section_id"
+                                    id="from_section_id"
+                                    class="form-select custom-input"
+                                >
+
+                                    <option value="">
+                                        Select Section
+                                    </option>
+
+                                    @foreach($classes as $class)
+
+                                        @foreach($class->sections as $section)
+
+                                            <option
+                                                value="{{ $section->id }}"
+                                            >
+
+                                                {{ $class->name }}
+                                                -
+                                                {{ $section->name }}
+
+                                            </option>
+
+                                        @endforeach
+
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+
+
+
+                            <!-- TO SECTION -->
+
+                            <div class="col-md-3">
+
+                                <label class="form-label fw-semibold">
+
+                                    To Section
+
+                                </label>
+
+                                <select
+                                    name="to_section_id"
+                                    id="to_section_id"
+                                    class="form-select custom-input"
+                                >
+
+                                    <option value="">
+                                        Select Section
+                                    </option>
+
+                                    @foreach($classes as $class)
+
+                                        @foreach($class->sections as $section)
+
+                                            <option
+                                                value="{{ $section->id }}"
+                                            >
+
+                                                {{ $class->name }}
+                                                -
+                                                {{ $section->name }}
+
+                                            </option>
+
+                                        @endforeach
+
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- ================================= -->
+                        <!-- FETCH BUTTON -->
+                        <!-- ================================= -->
+
+                        <div class="mt-4 mb-4">
+
+                            <button
+                                type="button"
+                                class="btn btn-primary btn-custom"
+                                id="fetch_students"
+                            >
+
+                                <i class="bi bi-search"></i>
+
+                                Fetch Students
+
+                            </button>
+
+                        </div>
+
+
+
+                        <!-- ================================= -->
+                        <!-- TABLE -->
+                        <!-- ================================= -->
+
+                        <div class="table-responsive">
+
+                            <table
+                                class="table table-bordered student-table"
+                            >
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th width="5%">
+
+                                            <input
+                                                type="checkbox"
+                                                id="select_all"
+                                            >
+
+                                        </th>
+
+                                        <th>
+                                            Admission No
+                                        </th>
+
+                                        <th>
+                                            Student Name
+                                        </th>
+
+                                        <th>
+                                            Roll No
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody id="student_table">
+
+                                    <tr id="empty_row">
+
+                                        <td
+                                            colspan="4"
+                                            class="text-center empty-row"
+                                        >
+
+                                            Click "Fetch Students"
+
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+
+                        <!-- ================================= -->
+                        <!-- SUBMIT -->
+                        <!-- ================================= -->
+
+                        <div class="mt-4">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-custom"
+                            >
+
+                                <i class="bi bi-arrow-repeat"></i>
+
+                                Promote Selected Students
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
 
         </div>
 
-        <div class="card-body">
 
 
-            <!-- TOP BUTTONS -->
+        <!-- ============================================= -->
+        <!-- HISTORY TAB -->
+        <!-- ============================================= -->
 
-            <div class="mb-4 d-flex gap-2">
+        <div
+            class="tab-pane fade"
+            id="history_tab"
+        >
 
-                <button
-                    class="btn btn-primary"
-                    id="promotion_tab">
+            <div class="card custom-card">
 
-                    <i class="bi bi-mortarboard-fill"></i>
+                <div class="card-header bg-dark text-white p-3">
 
-                    Student Promotion
+                    <h5 class="mb-0">
 
-                </button>
+                        <i class="bi bi-clock-history"></i>
 
+                        Promotion History
 
-                <button
-                    class="btn btn-dark"
-                    id="history_tab">
-
-                    <i class="bi bi-clock-history"></i>
-
-                    Promotion History
-
-                </button>
-
-            </div>
-
-
-
-
-            <!-- PROMOTION SECTION -->
-
-            <div id="promotion_section">
-
-
-                <!-- FILTERS -->
-
-                <div class="row">
-
-                    <!-- CURRENT YEAR -->
-
-                    <div class="col-md-3 mb-3">
-
-                        <label>
-                            Current Academic Year
-                        </label>
-
-                        <input
-                            type="text"
-                            id="academic_year"
-                            class="form-control"
-                            value="2025-2026">
-
-                    </div>
-
-
-
-                    <!-- NEW YEAR -->
-
-                    <div class="col-md-3 mb-3">
-
-                        <label>
-                            New Academic Year
-                        </label>
-
-                        <input
-                            type="text"
-                            id="new_academic_year"
-                            class="form-control"
-                            value="2026-27">
-
-                    </div>
-
-
-
-                    <!-- FROM SECTION -->
-
-                    <div class="col-md-3 mb-3">
-
-                        <label>
-                            From Class / Section
-                        </label>
-
-                        <select
-                            id="from_section"
-                            class="form-control">
-
-                            <option value="">
-                                Select
-                            </option>
-
-                            @foreach($classes as $class)
-
-                                @foreach($class->sections as $section)
-
-                                    <option value="{{ $section->id }}">
-
-                                        {{ $class->name }}
-                                        -
-                                        {{ $section->name }}
-
-                                    </option>
-
-                                @endforeach
-
-                            @endforeach
-
-                        </select>
-
-                    </div>
-
-
-
-
-                    <!-- TO SECTION -->
-
-                    <div class="col-md-3 mb-3">
-
-                        <label>
-                            To Class / Section
-                        </label>
-
-                        <select
-                            id="to_section"
-                            class="form-control">
-
-                            <option value="">
-                                Select
-                            </option>
-
-                            @foreach($classes as $class)
-
-                                @foreach($class->sections as $section)
-
-                                    <option value="{{ $section->id }}">
-
-                                        {{ $class->name }}
-                                        -
-                                        {{ $section->name }}
-
-                                    </option>
-
-                                @endforeach
-
-                            @endforeach
-
-                        </select>
-
-                    </div>
+                    </h5>
 
                 </div>
 
 
 
-                <!-- FETCH BUTTON -->
+                <div class="card-body p-0">
 
-                <div class="mb-4">
+                    <div class="table-responsive">
 
-                    <button
-                        class="btn btn-primary"
-                        id="fetch_students">
+                        <table class="table table-bordered mb-0">
 
-                        Fetch Students
-
-                    </button>
-
-                </div>
-
-
-
-
-                <!-- STUDENT TABLE -->
-
-                <div class="card shadow-sm">
-
-                    <div class="card-header bg-primary text-white">
-
-                        <h5 class="mb-0">
-
-                            Student Promotion
-
-                        </h5>
-
-                    </div>
-
-                    <div class="card-body">
-
-                        <table
-                            class="table table-bordered table-striped">
-
-                            <thead>
+                            <thead class="table-light">
 
                                 <tr>
 
-                                    <th width="50">
+                                    <th>#</th>
 
-                                        <input
-                                            type="checkbox"
-                                            id="select_all">
+                                    <th>Student</th>
 
-                                    </th>
+                                    <th>From Section</th>
 
-                                    <th>Name</th>
-
-                                    <th>Roll No</th>
-
-                                    <th>Phone</th>
-
-                                    <th>Class</th>
-
-                                    <th>Section</th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody id="students_table_body">
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-
-
-
-                <!-- PROMOTE BUTTON -->
-
-                <div class="mt-4">
-
-                    <button
-                        class="btn btn-success"
-                        id="promote_btn">
-
-                        Promote Selected Students
-
-                    </button>
-
-                </div>
-
-            </div>
-
-
-
-
-
-            <!-- HISTORY SECTION -->
-
-            <div id="history_section" style="display:none;">
-
-                <div class="card shadow-sm">
-
-                    <div class="card-header bg-dark text-white">
-
-                        <h5 class="mb-0">
-
-                            Promotion History
-
-                        </h5>
-
-                    </div>
-
-                    <div class="card-body">
-
-                        <table
-                            class="table table-bordered table-striped">
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>Name</th>
-
-                                    <th>Previous Class</th>
-
-                                    <th>Current Class</th>
+                                    <th>To Section</th>
 
                                     <th>Academic Year</th>
 
@@ -307,47 +413,89 @@
 
                             <tbody>
 
-                                @foreach($histories as $history)
+                                @forelse($histories as $key => $history)
 
-                                <tr>
+                                    <tr>
 
-                                    <td>
+                                        <td>
 
-                                        {{ $history->student->first_name ?? '-' }}
+                                            {{ $histories->firstItem() + $key }}
 
-                                    </td>
+                                        </td>
 
-                                    <td>
+                                        <td>
 
-                                        {{ $history->fromSection->classModel->name ?? '-' }}
-                                        -
-                                        {{ $history->fromSection->name ?? '-' }}
+                                            {{ $history->student->first_name ?? '' }}
+                                            {{ $history->student->last_name ?? '' }}
 
-                                    </td>
+                                        </td>
 
-                                    <td>
+                                        <td>
 
-                                        {{ $history->toSection->classModel->name ?? '-' }}
-                                        -
-                                        {{ $history->toSection->name ?? '-' }}
+                                            <span class="badge bg-info badge-custom">
 
-                                    </td>
+                                                {{ $history->fromSection->classModel->name ?? '' }}
+                                                -
+                                                {{ $history->fromSection->name ?? '' }}
 
-                                    <td>
+                                            </span>
 
-                                        {{ $history->academic_year ?? '-' }}
+                                        </td>
 
-                                    </td>
+                                        <td>
 
-                                </tr>
+                                            <span class="badge bg-primary badge-custom">
 
-                                @endforeach
+                                                {{ $history->toSection->classModel->name ?? '' }}
+                                                -
+                                                {{ $history->toSection->name ?? '' }}
+
+                                            </span>
+
+                                        </td>
+
+                                        <td>
+
+                                            <span class="badge bg-success badge-custom">
+
+                                                {{ $history->academic_year }}
+
+                                            </span>
+
+                                        </td>
+
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+
+                                        <td
+                                            colspan="5"
+                                            class="text-center py-4"
+                                        >
+
+                                            No promotion history found
+
+                                        </td>
+
+                                    </tr>
+
+                                @endforelse
 
                             </tbody>
 
                         </table>
 
                     </div>
+
+                </div>
+
+
+
+                <div class="card-footer bg-white">
+
+                    {{ $histories->links() }}
 
                 </div>
 
@@ -363,53 +511,127 @@
 
 
 
-
 @push('scripts')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script>
 
-    // TAB SWITCHING
+toastr.options = {
 
-    $('#promotion_tab').click(function () {
+    closeButton: true,
 
-        $('#promotion_section').show();
+    progressBar: true,
 
-        $('#history_section').hide();
+    newestOnTop: true,
 
-        $('#promotion_tab')
-            .removeClass('btn-dark')
-            .addClass('btn-primary');
+    preventDuplicates: true,
 
-        $('#history_tab')
-            .removeClass('btn-primary')
-            .addClass('btn-dark');
+    positionClass: "toast-top-right",
 
-    });
+    timeOut: "2500"
+};
 
 
 
-    $('#history_tab').click(function () {
+$(document).ready(function () {
 
-        $('#promotion_section').hide();
+    /*
+    |--------------------------------------------------------------------------
+    | FETCH STUDENTS
+    |--------------------------------------------------------------------------
+    */
 
-        $('#history_section').show();
+    $('#fetch_students').click(function () {
 
-        $('#history_tab')
-            .removeClass('btn-dark')
-            .addClass('btn-primary');
+        let academicYear =
+            $.trim(
+                $('input[name="academic_year"]').val()
+            );
 
-        $('#promotion_tab')
-            .removeClass('btn-primary')
-            .addClass('btn-dark');
+        let newAcademicYear =
+            $.trim(
+                $('input[name="new_academic_year"]').val()
+            );
 
-    });
+        let fromSection =
+            $.trim(
+                $('#from_section_id').val()
+            );
+
+        let toSection =
+            $.trim(
+                $('#to_section_id').val()
+            );
 
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDATIONS
+        |--------------------------------------------------------------------------
+        */
 
-    // FETCH STUDENTS
+        if (academicYear === '') {
 
-    $('#fetch_students').click(function() {
+            toastr.warning(
+                'Please enter current academic year'
+            );
+
+            return;
+        }
+
+
+
+        if (newAcademicYear === '') {
+
+            toastr.warning(
+                'Please enter new academic year'
+            );
+
+            return;
+        }
+
+
+
+        if (fromSection === '') {
+
+            toastr.warning(
+                'Please select from section'
+            );
+
+            return;
+        }
+
+
+
+        if (toSection === '') {
+
+            toastr.warning(
+                'Please select to section'
+            );
+
+            return;
+        }
+
+
+
+        if (fromSection === toSection) {
+
+            toastr.warning(
+                'From and To section cannot be same'
+            );
+
+            return;
+        }
+
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | AJAX
+        |--------------------------------------------------------------------------
+        */
 
         $.ajax({
 
@@ -421,138 +643,185 @@
 
                 _token: "{{ csrf_token() }}",
 
-                from_section_id: $('#from_section').val(),
+                from_section_id: fromSection,
 
-                academic_year: $('#academic_year').val()
-
+                academic_year: academicYear
             },
 
-            success: function(response) {
+            beforeSend: function () {
 
-                let rows = '';
-
-                response.forEach(item => {
-
-                    rows += `
+                $('#student_table').html(`
 
                     <tr>
 
-                        <td>
+                        <td
+                            colspan="4"
+                            class="text-center py-4"
+                        >
 
-                            <input
-                                type="checkbox"
-                                class="student_checkbox"
-                                value="${item.id}">
-
-                        </td>
-
-                        <td>
-
-                            ${item.student.first_name ?? '-'}
-
-                        </td>
-
-                        <td>
-
-                            ${item.roll_no ?? '-'}
-
-                        </td>
-
-                        <td>
-
-                            ${item.student.phone ?? '-'}
-
-                        </td>
-
-                        <td>
-
-                            ${item.section.class_model.name ?? '-'}
-
-                        </td>
-
-                        <td>
-
-                            ${item.section.name ?? '-'}
+                            Loading students...
 
                         </td>
 
                     </tr>
+                `);
+            },
 
+
+
+            success: function (response) {
+
+                let rows = '';
+
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | NO STUDENTS
+                |--------------------------------------------------------------------------
+                */
+
+                if (!response.status) {
+
+                    toastr.warning(
+                        response.message
+                    );
+
+                    $('#student_table').html(`
+
+                        <tr>
+
+                            <td
+                                colspan="4"
+                                class="text-center empty-row"
+                            >
+
+                                No students found
+
+                            </td>
+
+                        </tr>
+                    `);
+
+                    return;
+                }
+
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | SUCCESS
+                |--------------------------------------------------------------------------
+                */
+
+                toastr.success(
+                    'Students loaded successfully'
+                );
+
+
+
+                $.each(response.students, function (index, student) {
+
+                    rows += `
+
+                        <tr>
+
+                            <td>
+
+                                <input
+                                    type="checkbox"
+                                    name="academic_ids[]"
+                                    value="${student.id}"
+                                    class="student_checkbox"
+                                >
+
+                            </td>
+
+                            <td>
+
+                                ${student.student.admission_no ?? ''}
+
+                            </td>
+
+                            <td>
+
+                                ${student.student.first_name ?? ''}
+                                ${student.student.last_name ?? ''}
+
+                            </td>
+
+                            <td>
+
+                                ${student.roll_no ?? ''}
+
+                            </td>
+
+                        </tr>
                     `;
                 });
 
-                $('#students_table_body').html(rows);
 
-            }
-
-        });
-
-    });
-
-
-
-
-    // SELECT ALL
-
-    $('#select_all').click(function() {
-
-        $('.student_checkbox')
-            .prop('checked', this.checked);
-
-    });
-
-
-
-
-    // PROMOTE STUDENTS
-
-    $('#promote_btn').click(function() {
-
-        let academic_ids = [];
-
-        $('.student_checkbox:checked').each(function() {
-
-            academic_ids.push($(this).val());
-
-        });
-
-        $.ajax({
-
-            url: "{{ route('student.promotions.promote') }}",
-
-            type: "POST",
-
-            data: {
-
-                _token: "{{ csrf_token() }}",
-
-                academic_ids: academic_ids,
-
-                from_section_id: $('#from_section').val(),
-
-                to_section_id: $('#to_section').val(),
-
-                new_academic_year: $('#new_academic_year').val()
-
+                $('#student_table').html(rows);
             },
 
-            success: function(response) {
 
-                alert(response.message);
 
-                location.reload();
-
-            },
-
-            error: function(xhr) {
+           error: function (xhr) {
 
                 console.log(xhr.responseJSON);
 
+                toastr.error(
+                    JSON.stringify(xhr.responseJSON)
+                );
             }
-
         });
-
     });
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SELECT ALL
+    |--------------------------------------------------------------------------
+    */
+
+    $('#select_all').click(function () {
+
+        $('.student_checkbox').prop(
+
+            'checked',
+
+            $(this).prop('checked')
+        );
+    });
+
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORM SUBMIT VALIDATION
+    |--------------------------------------------------------------------------
+    */
+
+    $('#promotionForm').submit(function (e) {
+
+        let checkedStudents =
+            $('.student_checkbox:checked').length;
+
+
+        if (checkedStudents === 0) {
+
+            e.preventDefault();
+
+            toastr.warning(
+                'Please select students'
+            );
+        }
+    });
+
+});
 
 </script>
 

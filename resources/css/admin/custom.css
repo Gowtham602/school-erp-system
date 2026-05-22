@@ -1,0 +1,193 @@
+/* =========================================
+   GLOBAL
+========================================= */
+
+body{
+    background:#f4f6f9;
+    font-family:'Segoe UI', sans-serif;
+}
+
+
+
+/* =========================================
+   PAGE TITLE
+========================================= */
+
+.page-title{
+    font-size:32px;
+    font-weight:700;
+    color:#111827;
+}
+
+.sub-title{
+    color:#6b7280;
+    font-size:14px;
+}
+
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.custom-card{
+    border:none;
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow:0 2px 15px rgba(0,0,0,0.08);
+}
+
+.card-header-custom{
+    background:linear-gradient(
+        135deg,
+        #0d6efd,
+        #0b5ed7
+    );
+
+    color:white;
+
+    padding:18px 24px;
+}
+
+
+
+/* =========================================
+   NAV TABS
+========================================= */
+
+.nav-pills .nav-link{
+
+    border-radius:12px;
+
+    padding:10px 20px;
+
+    font-weight:600;
+}
+
+
+
+/* =========================================
+   INPUTS
+========================================= */
+
+.custom-input{
+
+    height:48px;
+
+    border-radius:12px;
+
+    border:1px solid #dcdcdc;
+}
+
+.custom-input:focus{
+
+    box-shadow:none;
+
+    border-color:#0d6efd;
+}
+
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.btn-custom{
+
+    border-radius:12px;
+
+    padding:10px 22px;
+
+    font-weight:600;
+}
+
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.student-table th{
+
+    background:#f8f9fa;
+
+    font-size:14px;
+
+    font-weight:700;
+}
+
+.student-table td,
+.student-table th{
+
+    padding:14px;
+
+    vertical-align:middle;
+}
+
+
+
+/* =========================================
+   BADGE
+========================================= */
+
+.badge-custom{
+
+    border-radius:30px;
+
+    padding:7px 14px;
+
+    font-size:12px;
+}
+
+
+
+/* =========================================
+   EMPTY ROW
+========================================= */
+
+.empty-row{
+
+    padding:35px !important;
+
+    color:#999;
+
+    font-size:14px;
+}
+
+
+
+/* =========================================
+   TOASTR FIX
+========================================= */
+
+/* =========================================
+   TOASTR FIX
+========================================= */
+
+#toast-container{
+
+    position: fixed !important;
+
+    top: 20px !important;
+
+    right: 20px !important;
+
+    left: auto !important;
+
+    bottom: auto !important;
+
+    z-index: 999999 !important;
+}
+
+
+
+/* TOAST STYLE */
+
+.toast{
+
+    opacity: 1 !important;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+    border-radius: 10px;
+}

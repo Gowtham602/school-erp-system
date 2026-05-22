@@ -5,192 +5,311 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ClassModel;
-use App\Models\Student;
 use App\Models\StudentHistory;
 use App\Models\StudentAcademic;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class StudentPromotionController extends Controller
 {
 
-    // INDEX PAGE
+    /*
+    |--------------------------------------------------------------------------
+    | INDEX PAGE
+    |--------------------------------------------------------------------------
+    */
 
     public function index()
     {
-    $classes = ClassModel::with('sections')->get();
 
-    $histories = StudentHistory::with(['student','fromSection.classModel','toSection.classModel'])->latest()->get();
+        $classes = ClassModel::with('sections')->get();
 
-    return view('admin.student_promotions.index', compact('classes','histories'));
+
+        $histories = StudentHistory::with([
+
+                'student',
+                'fromSection.classModel',
+                'toSection.classModel'
+
+            ])
+            ->latest()
+            ->paginate(10);
+
+
+        return view(
+            'admin.student_promotions.index',
+            compact('classes', 'histories')
+        );
     }
 
 
 
-    // FETCH STUDENTS
+    /*
+    |--------------------------------------------------------------------------
+    | FETCH STUDENTS
+    |--------------------------------------------------------------------------
+    */
 
-    // public function getStudents(Request $request)
-    // {
+    public function getStudents(Request $request)
+    {
 
-    //     $request->validate([
+       $request->validate([
 
-    //         'from_section_id' => 'required',
+    'from_section_id' =>
+        'required|exists:sections,id',
 
-    //         'academic_year' => 'required'
-    //     ]);
-
-
-    //     // CURRENT YEAR STUDENTS ONLY
-
-    //     $students = StudentAcademic::with([
-
-    //             'student',
-
-    //             'section.classModel'
-
-    //         ])
-    //         ->where('section_id', $request->from_section_id)
-
-    //         ->where('academic_year', $request->academic_year)
-
-    //         ->get();
+    'academic_year' =>
+        'required'
+]);
 
 
-    //     return response()->json($students);
-    // }
+        $students = StudentAcademic::with([
 
-//         public function getStudents(Request $request)
-// {
+                'student',
+                'section.classModel'
 
-//     $students = Student::with([
+            ])
+            ->where(
 
-//             'section.classModel'
+                'section_id',
+                $request->from_section_id
 
-//         ])
-//         ->where(
-//             'section_id',
-//             $request->from_section_id
-//         )
-//         ->get();
+            )
+            ->where(
 
-//     return response()->json($students);
-// }
+                'academic_year',
+                $request->academic_year
 
-        public function getStudents(Request $request)
-{
-    $students = StudentAcademic::with([
+            )
+            ->where(
 
-            'student',
+                'status',
+                'studying'
 
-            'section.classModel'
+            )
+            ->get();
 
-        ])
-        ->where(
-
-            'section_id',
-
-            $request->from_section_id
-        )
-        ->where(
-
-            'academic_year',
-
-            $request->academic_year
-        )
-        ->where(
-
-            'status',
-
-            'studying'
-        )
-        ->get();
-
-    return response()->json($students);
-}
-
-    // PROMOTE STUDENTS
-
- public function promote(Request $request)
-{
-    $request->validate([
-
-        'academic_ids' => 'required',
-
-        'from_section_id' => 'required',
-
-        'to_section_id' => 'required',
-
-        'new_academic_year' => 'required'
-    ]);
-
-
-    $academics = StudentAcademic::whereIn(
-
-        'id',
-
-        $request->academic_ids
-
-    )->get();
-
-
-
-    foreach ($academics as $academic) {
 
 
         /*
         |--------------------------------------------------------------------------
-        | OLD STATUS UPDATE
+        | NO STUDENTS FOUND
         |--------------------------------------------------------------------------
         */
 
-        $academic->update([
+        if ($students->isEmpty()) {
 
-            'status' => 'promoted'
-        ]);
+            return response()->json([
 
+                'status' => false,
 
-        /*
-        |--------------------------------------------------------------------------
-        | NEW ACADEMIC ENTRY
-        |--------------------------------------------------------------------------
-        */
-
-        StudentAcademic::create([
-
-            'student_id' => $academic->student_id,
-
-            'section_id' => $request->to_section_id,
-
-            'academic_year' => $request->new_academic_year,
-
-            'roll_no' => $academic->roll_no,
-
-            'status' => 'studying'
-        ]);
+                'message' => 'No students found'
+            ]);
+        }
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | HISTORY
-        |--------------------------------------------------------------------------
-        */
 
-        StudentHistory::create([
+        return response()->json([
 
-            'student_id' => $academic->student_id,
+            'status' => true,
 
-            'from_section_id' => $request->from_section_id,
-
-            'to_section_id' => $request->to_section_id,
-
-            'academic_year' => $request->new_academic_year
+            'students' => $students
         ]);
     }
 
 
-    return response()->json([
 
-        'status' => true,
+    /*
+    |--------------------------------------------------------------------------
+    | PROMOTE STUDENTS
+    |--------------------------------------------------------------------------
+    */
 
-        'message' => 'Students Promoted Successfully'
-    ]);
-}
+    public function promote(Request $request)
+    {
+
+        $request->validate([
+
+            'academic_ids' =>
+                'required|array',
+
+            'academic_ids.*' =>
+                'exists:student_academics,id',
+
+            'from_section_id' =>
+                'required|exists:sections,id',
+
+            'to_section_id' =>
+                'required|exists:sections,id|different:from_section_id',
+
+            'academic_year' =>
+                'required',
+
+            'new_academic_year' =>
+                'required|different:academic_year',
+        ]);
+
+
+        DB::beginTransaction();
+
+        try {
+
+            $academics = StudentAcademic::whereIn(
+
+                    'id',
+
+                    $request->academic_ids
+
+                )
+                ->where(
+
+                    'status',
+
+                    'studying'
+
+                )
+                ->get();
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CHECK EMPTY
+            |--------------------------------------------------------------------------
+            */
+
+            if ($academics->isEmpty()) {
+
+                return response()->json([
+
+                    'status' => false,
+
+                    'message' => 'No students selected'
+                ]);
+            }
+
+
+
+            foreach ($academics as $academic) {
+
+                /*
+                |--------------------------------------------------------------------------
+                | CHECK ALREADY PROMOTED
+                |--------------------------------------------------------------------------
+                */
+
+                $alreadyPromoted = StudentAcademic::where(
+
+                        'student_id',
+
+                        $academic->student_id
+
+                    )
+                    ->where(
+
+                        'academic_year',
+
+                        $request->new_academic_year
+
+                    )
+                    ->exists();
+
+
+
+                if ($alreadyPromoted) {
+
+                    continue;
+                }
+
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | UPDATE OLD STATUS
+                |--------------------------------------------------------------------------
+                */
+
+                $academic->update([
+
+                    'status' => 'promoted'
+                ]);
+
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | CREATE NEW ACADEMIC
+                |--------------------------------------------------------------------------
+                */
+
+                StudentAcademic::create([
+
+                    'student_id' =>
+                        $academic->student_id,
+
+                    'section_id' =>
+                        $request->to_section_id,
+
+                    'academic_year' =>
+                        $request->new_academic_year,
+
+                    'roll_no' =>
+                        null,
+
+                    'status' =>
+                        'studying'
+                ]);
+
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | SAVE HISTORY
+                |--------------------------------------------------------------------------
+                */
+
+                StudentHistory::create([
+
+                    'student_id' =>
+                        $academic->student_id,
+
+                    'from_section_id' =>
+                        $request->from_section_id,
+
+                    'to_section_id' =>
+                        $request->to_section_id,
+
+                    'academic_year' =>
+                        $request->new_academic_year
+                ]);
+            }
+
+
+
+            DB::commit();
+
+
+
+            return response()->json([
+
+                'status' => true,
+
+                'message' => 'Students promoted successfully'
+            ]);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            Log::error($e);
+
+
+            return response()->json([
+
+                'status' => false,
+
+                'message' => 'Something went wrong'
+            ]);
+        }
+    }
 }

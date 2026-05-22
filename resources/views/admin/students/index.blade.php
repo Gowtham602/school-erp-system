@@ -54,12 +54,12 @@
                     Student List
 
                 </h4>
-
+<!-- 
                 <span class="badge bg-primary fs-6 px-3 py-2">
 
                     ERP System
 
-                </span>
+                </span> -->
 
             </div>
 

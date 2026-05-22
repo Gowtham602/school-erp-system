@@ -1,6 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 @import "./admin/section.css";
+@import "./admin/custom.css";
 
 @tailwind base;
 @tailwind components;
