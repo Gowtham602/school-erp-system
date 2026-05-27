@@ -19,76 +19,162 @@ class StudentController extends Controller
     }
 
 
+    // public function data()
+    // {
+    //     $students = Student::with([
+    //         'currentAcademic.section.class',
+    //         'currentAcademic.section.teacher'
+    //     ]);
+    //     // dd($students);
+
+    //     return DataTables::of($students)
+
+    //         ->addColumn('student_name', function ($row) {
+
+    //             return $row->first_name;
+    //         })
+
+    //         ->addColumn('class', function ($row) {
+
+    //             return $row->currentAcademic->section->class->name ?? '-';
+    //         })
+
+    //         ->addColumn('section', function ($row) {
+
+    //             return $row->currentAcademic->section->name ?? '-';
+    //         })
+
+    //         ->addColumn('teacher', function ($row) {
+
+    //             return $row->currentAcademic->section->classTeacher->teacher->name ?? '-';
+    //         })
+
+    //         ->addColumn('roll_no', function ($row) {
+
+    //             return $row->currentAcademic->roll_no ?? '-';
+    //         })
+
+    //         ->addColumn('academic_year', function ($row) {
+
+    //             return $row->currentAcademic->academic_year ?? '-';
+    //         })
+
+    //         ->addColumn('action', function ($row) {
+
+    //             return '
+
+    //                 <a href="'.route('students.show',$row->id).'"
+    //                     class="btn btn-info btn-sm">
+
+    //                     <i class="bi bi-eye"></i>
+    //                 </a>
+
+    //                 <a href="'.route('students.edit',$row->id).'"
+    //                     class="btn btn-primary btn-sm">
+
+    //                     <i class="bi bi-pencil"></i>
+    //                 </a>
+
+    //                 <button class="btn btn-danger btn-sm deleteBtn"
+    //                     data-id="'.$row->id.'">
+
+    //                     <i class="bi bi-trash"></i>
+    //                 </button>
+    //             ';
+    //         })
+
+    //         ->rawColumns(['action'])
+
+    //         ->make(true);
+    // }
+
+
+
+
+
     public function data()
-    {
-        $students = Student::with([
-            'currentAcademic.section.class',
-            'currentAcademic.section.teacher'
-        ]);
-        // dd($students);
+{
+    $students = Student::with([
+        'currentAcademic.section.class',
+        'currentAcademic.section.teacher'
+    ])
 
-        return DataTables::of($students)
+    ->join('student_academics', 'students.id', '=', 'student_academics.student_id')
 
-            ->addColumn('student_name', function ($row) {
+    ->join('sections', 'student_academics.section_id', '=', 'sections.id')
 
-                return $row->first_name;
-            })
+    ->join('classes', 'sections.class_id', '=', 'classes.id')
 
-            ->addColumn('class', function ($row) {
+    ->select('students.*')
 
-                return $row->currentAcademic->section->class->name ?? '-';
-            })
+    ->orderByRaw("
+        CASE
+            WHEN classes.name = 'LKG' THEN -1
+            WHEN classes.name = 'UKG' THEN 0
+            ELSE CAST(classes.name AS UNSIGNED)
+        END ASC
+    ");
 
-            ->addColumn('section', function ($row) {
+    return DataTables::of($students)
 
-                return $row->currentAcademic->section->name ?? '-';
-            })
+        ->addColumn('student_name', function ($row) {
 
-            ->addColumn('teacher', function ($row) {
+            return $row->first_name;
+        })
 
-                return $row->currentAcademic->section->classTeacher->teacher->name ?? '-';
-            })
+        ->addColumn('class', function ($row) {
 
-            ->addColumn('roll_no', function ($row) {
+            return $row->currentAcademic->section->class->name ?? '-';
+        })
 
-                return $row->currentAcademic->roll_no ?? '-';
-            })
+        ->addColumn('section', function ($row) {
 
-            ->addColumn('academic_year', function ($row) {
+            return $row->currentAcademic->section->name ?? '-';
+        })
 
-                return $row->currentAcademic->academic_year ?? '-';
-            })
+        ->addColumn('teacher', function ($row) {
 
-            ->addColumn('action', function ($row) {
+            return $row->currentAcademic->section->classTeacher->teacher->name ?? '-';
+        })
 
-                return '
+        ->addColumn('roll_no', function ($row) {
 
-                    <a href="'.route('students.show',$row->id).'"
-                        class="btn btn-info btn-sm">
+            return $row->currentAcademic->roll_no ?? '-';
+        })
 
-                        <i class="bi bi-eye"></i>
-                    </a>
+        ->addColumn('academic_year', function ($row) {
 
-                    <a href="'.route('students.edit',$row->id).'"
-                        class="btn btn-primary btn-sm">
+            return $row->currentAcademic->academic_year ?? '-';
+        })
 
-                        <i class="bi bi-pencil"></i>
-                    </a>
+        ->addColumn('action', function ($row) {
 
-                    <button class="btn btn-danger btn-sm deleteBtn"
-                        data-id="'.$row->id.'">
+            return '
 
-                        <i class="bi bi-trash"></i>
-                    </button>
-                ';
-            })
+                <a href="'.route('students.show',$row->id).'"
+                    class="btn btn-info btn-sm">
 
-            ->rawColumns(['action'])
+                    <i class="bi bi-eye"></i>
+                </a>
 
-            ->make(true);
-    }
+                <a href="'.route('students.edit',$row->id).'"
+                    class="btn btn-primary btn-sm">
 
+                    <i class="bi bi-pencil"></i>
+                </a>
 
+                <button class="btn btn-danger btn-sm deleteBtn"
+                    data-id="'.$row->id.'">
+
+                    <i class="bi bi-trash"></i>
+                </button>
+            ';
+        })
+
+        ->rawColumns(['action'])
+
+        ->make(true);
+}
     public function create()
     {
         $sections = Section::with('class')->get();
@@ -219,7 +305,7 @@ class StudentController extends Controller
             ]);
         }
     }
-
+    
 
     public function show($id)
     {

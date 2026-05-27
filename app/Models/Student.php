@@ -48,7 +48,7 @@ class Student extends Model
         return $this->belongsTo(ClassModel::class);
     }
 
-    public function creator()
+     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
     }
@@ -68,11 +68,17 @@ class Student extends Model
     {
         return $this->hasMany(StudentHistory::class);
     }
-     public function section()
+   public function section()
     {
-        return $this->belongsTo(Section::class);
+        return $this->hasOneThrough(
+            Section::class,
+            StudentAcademic::class,
+            'student_id',
+            'id',
+            'id',
+            'section_id'
+        );
     }
-
     public function academics()
     {
     return $this->hasMany(StudentAcademic::class);

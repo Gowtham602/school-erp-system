@@ -14,7 +14,7 @@
 
         <!-- DASHBOARD -->
         <a href="{{ route('admin.dashboard') }}"
-           class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
 
             <i class="bi bi-speedometer2 me-2"></i>
             Dashboard
@@ -25,7 +25,7 @@
 
         <!-- CLASSES -->
         <a href="{{ route('classes.index') }}"
-           class="sidebar-link {{ request()->routeIs('classes.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('classes.*') ? 'active' : '' }}">
 
             <i class="bi bi-mortarboard me-2"></i>
             Classes
@@ -34,7 +34,7 @@
 
         <!-- SECTIONS -->
         <a href="{{ route('sections.index') }}"
-           class="sidebar-link {{ request()->routeIs('sections.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('sections.*') ? 'active' : '' }}">
 
             <i class="bi bi-diagram-3 me-2"></i>
             Sections
@@ -43,7 +43,7 @@
         <!-- CLASS TEACHER -->
 
         <a href="{{ route('class-teachers.index') }}"
-        class="sidebar-link {{ request()->routeIs('class-teachers.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('class-teachers.*') ? 'active' : '' }}">
 
             <i class="bi bi-person-video3 me-2"></i>
             Class Teacher
@@ -53,7 +53,7 @@
 
         <!-- SUBJECTS -->
         <a href="{{ route('subjects.index') }}"
-           class="sidebar-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}">
 
             <i class="bi bi-book me-2"></i>
             Subjects
@@ -62,7 +62,7 @@
 
         <!-- SUBJECT TEACHER -->
         <a href="{{ route('subject-teacher.index') }}"
-           class="sidebar-link {{ request()->routeIs('subject-teacher.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('subject-teacher.*') ? 'active' : '' }}">
 
             <i class="bi bi-person-workspace me-2"></i>
             Subject Teacher
@@ -71,17 +71,17 @@
 
         <!-- STUDENTS -->
         <a href="{{ route('students.index') }}"
-           class="sidebar-link {{ request()->routeIs('students.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('students.*') ? 'active' : '' }}">
 
             <i class="bi bi-people me-2"></i>
             Students
         </a>
 
 
-        
+
         <!-- TEACHERS -->
         <a href="{{ route('teachers.index') }}"
-           class="sidebar-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('teachers.*') ? 'active' : '' }}">
 
             <i class="bi bi-person-badge me-2"></i>
             Teachers
@@ -95,8 +95,8 @@
             <i class="bi bi-arrow-up-circle me-2"></i>
             Promotion
         </a> -->
-         <a href="{{ route('student.promotions.index') }}"
-           class="sidebar-link {{ request()->routeIs('promotion.*') ? 'active' : '' }}">
+        <a href="{{ route('student.promotions.index') }}"
+            class="sidebar-link {{ request()->routeIs('promotion.*') ? 'active' : '' }}">
 
             <i class="bi bi-arrow-up-circle me-2"></i>
             Promotion
@@ -107,46 +107,114 @@
 
 
 
+
         <!-- ================= TEACHER ================= -->
+
         @if(auth()->user()->role == 'teacher')
 
         <!-- DASHBOARD -->
+
         <a href="{{ route('teacher.dashboard') }}"
-           class="sidebar-link {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('teacher.dashboard') ? 'active' : '' }}">
 
             <i class="bi bi-speedometer2 me-2"></i>
+
             Dashboard
+
         </a>
+
 
 
         <!-- MY STUDENTS -->
-        <a href="{{ route('teacher.students.index') }}"
-           class="sidebar-link {{ request()->routeIs('teacher.students.*') ? 'active' : '' }}">
 
-            <i class="bi bi-people me-2"></i>
+        <a href="{{ route('teacher.students.index') }}"
+            class="sidebar-link {{ request()->routeIs('teacher.students.*') ? 'active' : '' }}">
+
+            <i class="bi bi-people-fill me-2"></i>
+
             My Students
+
         </a>
+
 
 
         <!-- MY SUBJECTS -->
-        <a href="{{ route('teacher-subject') }}"
-           class="sidebar-link {{ request()->routeIs('teacher.subject') ? 'active' : '' }}">
 
-            <i class="bi bi-book me-2"></i>
+        <a href="{{ route('teacher.subjects') }}"
+            class="sidebar-link {{ request()->routeIs('teacher.subjects') ? 'active' : '' }}">
+
+            <i class="bi bi-book-half me-2"></i>
+
             My Subjects
+
         </a>
+
 
 
         <!-- ATTENDANCE -->
+<!-- 
         <a href="#"
-           class="sidebar-link">
+            class="sidebar-link">
 
             <i class="bi bi-calendar-check me-2"></i>
+
             Attendance
-        </a>
+
+        </a> -->
+
+
+
+        <!-- HOMEWORK -->
+
+        <!-- <a href="#"
+            class="sidebar-link">
+
+            <i class="bi bi-journal-text me-2"></i>
+
+            Homework
+
+        </a> -->
+
+
+
+        <!-- TIMETABLE -->
+
+        <!-- <a href="#"
+            class="sidebar-link">
+
+            <i class="bi bi-clock-history me-2"></i>
+
+            Timetable
+
+        </a> -->
+
+
+
+        <!-- EXAMS -->
+
+        <!-- <a href="#"
+            class="sidebar-link">
+
+            <i class="bi bi-file-earmark-text me-2"></i>
+
+            Exams
+
+        </a> -->
+
+
+
+        <!-- PROFILE -->
+
+        <!-- <a href="#"
+            class="sidebar-link">
+
+            <i class="bi bi-person-circle me-2"></i>
+
+            Profile
+
+        </a> -->
 
         @endif
-
 
 
 
@@ -155,7 +223,7 @@
 
         <!-- DASHBOARD -->
         <a href="{{ route('student.dashboard') }}"
-           class="sidebar-link {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
+            class="sidebar-link {{ request()->routeIs('student.dashboard') ? 'active' : '' }}">
 
             <i class="bi bi-speedometer2 me-2"></i>
             Dashboard
@@ -164,7 +232,7 @@
 
         <!-- PROFILE -->
         <a href="#"
-           class="sidebar-link">
+            class="sidebar-link">
 
             <i class="bi bi-person-circle me-2"></i>
             Profile
